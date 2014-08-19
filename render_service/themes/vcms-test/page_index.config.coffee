@@ -1,0 +1,3 @@
+prepare = ($) ->
+
+module.exports = prepare
