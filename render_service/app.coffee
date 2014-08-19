@@ -50,12 +50,14 @@ global.app = app = @
 app.helper = require(@conf.lib_path + "helpers")
 app.Request = require(@conf.lib_path + "request")
 app.Template = require(@conf.lib_path + "template")
+Cache = require(@conf.lib_path + "cache")
 Router = require(@conf.lib_path + "router")
 Api = require(@conf.lib_path + "api")
 
 # create router and api instances
 app.router = new Router(@)
 app.api = new Api(@)
+app.cache = new Cache()
 
 # add default routes
 # / and /index.html - template {tpl_page_prefix}_index
@@ -98,6 +100,3 @@ server = http.createServer (req, res) ->
 server.listen(@conf.app_port, @conf.app_host)
 
 @log_msg("Application is running and ready")
-
-
-
