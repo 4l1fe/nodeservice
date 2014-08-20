@@ -10,13 +10,10 @@ var http = require("http"),
 function form_ipc_pack(pathname, headers, http_method, params) {
     var query_params = querystring.parse(params);
 
-    query_params.update({
-        token: headers['token'],
-        x_token: headers['x-token']
-    });
-
     return {api_method: pathname,
             api_type: http_method,
+            token: headers['token'],
+            x_token: headers['x-token'],
             query_params: query_params};
 }
 
