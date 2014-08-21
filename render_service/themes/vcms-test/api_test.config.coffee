@@ -1,4 +1,4 @@
 prepare = ($) ->
-  $.api "/test/echo/1", "get", $.args(), $.params()
+  $.api "/test/echo/:id", "get", $.args(), $.params()
 
 module.exports = prepare
