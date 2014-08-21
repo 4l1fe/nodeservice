@@ -71,4 +71,6 @@
 
   this.backend_port = this.server['render_serv']['backend']['port'];
 
+  this.connection_string = 'tcp://' + this.backend_host + ':' + this.backend_port;
+
 }).call(this);

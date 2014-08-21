@@ -57,3 +57,4 @@ yaml = require 'js-yaml'
 # set backend(zeroprpc) port and host
 @backend_host = @server['render_serv']['backend']['host']
 @backend_port = @server['render_serv']['backend']['port']
+@connection_string = 'tcp://' + @backend_host + ':' + @backend_port
