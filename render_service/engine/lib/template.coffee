@@ -47,7 +47,7 @@ class Stack
     (data) =>
       if callback
         # run callback with retured params
-        params = []
+        params = {}
         if params_names != undefined
           for i in [0..params_names.length - 1]
             params[params_names[i]] = arguments[i + 1]

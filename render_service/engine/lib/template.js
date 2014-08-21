@@ -50,7 +50,7 @@
         return function(data) {
           var i, params, _i, _ref;
           if (callback) {
-            params = [];
+            params = {};
             if (params_names !== void 0) {
               for (i = _i = 0, _ref = params_names.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
                 params[params_names[i]] = arguments[i + 1];

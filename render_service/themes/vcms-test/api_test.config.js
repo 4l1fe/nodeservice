@@ -3,16 +3,7 @@
   var prepare;
 
   prepare = function($) {
-    var test_func;
-    $.api("/test/:id", "data", $.args());
-    test_func = function(code, params) {
-      if (code === $.req.app.api.STATUS_OK) {
-        return $.params("simple", params.data.text + ". GOT IT!");
-      } else {
-        return $.params("simple_error", "Something wrong");
-      }
-    };
-    return $.api("simple", test_func);
+    return $.api("/test/echo/1", "get", $.args(), $.params());
   };
 
   module.exports = prepare;

@@ -2,8 +2,18 @@
 # * part of engine
 #
 # usage: api.call(method, method_type, args, params, callback)
+make_ipc_pack = (method, method_type, params) ->
+  ipc_pack =
+    api_method: method
+    api_type: method_type
+    token: params.token
+    x_token: params.x_token
+    query_params: params
+
+  return ipc_pack
 
 fs = require('fs')
+Client = require('zerorpc').Client
 app = global.app
 
 class Api
@@ -11,6 +21,7 @@ class Api
     @STATUS_OK = 200
     @STATUS_NOT_FOUND = 404
     @STATUS_INTERNAl_ERROR = 500
+    @client = new Client();
 
   call: (method, method_type, args, params, callback) ->
     # method - method path (/user/info or /films/:id/info)
@@ -29,17 +40,15 @@ class Api
       for own key, val of args
         method = method.replace(":" + key, val)
 
-    # TEST BLOCK
-    # ignore method_type and params, just test
-    method = "/" + method if method[0] != "/"
-    fs.readFile @app.conf.path + '/tmp/api' + method, 'utf8', (err,data) ->
+    ipc_pack = make_ipc_pack(method, method_type, params)
+    @client.connect app.config.connection_string
+    @client.invoke 'route', ipc_pack, (err, res, more) ->
       if err
-        callback(500)
+        callback 500
       else
         try
-          json = JSON.parse(data.toString())
-          callback(200, json)
+          callback 200, res
         catch e
-          callback(500)
+          callback 500
 
 module.exports = Api
