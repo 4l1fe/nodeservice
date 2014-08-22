@@ -42,6 +42,24 @@
     return result;
   };
 
+  this.makeIpcPack = function(method, method_type, params, token, x_token) {
+    var ipc_pack;
+    if (token == null) {
+      token = null;
+    }
+    if (x_token == null) {
+      x_token = null;
+    }
+    ipc_pack = {
+      api_method: method,
+      api_type: method_type,
+      token: token,
+      x_token: x_token,
+      query_params: params
+    };
+    return ipc_pack;
+  };
+
   this.log_msg("Set up application");
 
   sys = require('sys');

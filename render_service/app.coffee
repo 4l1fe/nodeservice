@@ -32,6 +32,20 @@
       result[param[0]] = param[2]
   result
 
+# function to make ipc_pack
+@makeIpcPack = (method, method_type, params, token=null, x_token=null) ->
+  # method - method path (/user/info or /films/1/info)
+  # method_type - type of request: get, post, delete
+  # params - params for method call
+  ipc_pack =
+    api_method: method
+    api_type: method_type
+    token: token
+    x_token: x_token
+    query_params: params
+
+  return ipc_pack
+
 @log_msg("Set up application")
 # include common libs
 sys = require ('sys')

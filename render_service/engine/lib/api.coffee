@@ -2,15 +2,6 @@
 # * part of engine
 #
 # usage: api.call(method, method_type, args, params, callback)
-make_ipc_pack = (method, method_type, params) ->
-  ipc_pack =
-    api_method: method
-    api_type: method_type
-    token: params.token
-    x_token: params.x_token
-    query_params: params
-
-  return ipc_pack
 
 fs = require('fs')
 Client = require('zerorpc').Client
@@ -40,7 +31,7 @@ class Api
       for own key, val of args
         method = method.replace(":" + key, val)
 
-    ipc_pack = make_ipc_pack(method, method_type, params)
+    ipc_pack = app.makeIpcPack(method, method_type, params, params.token, params.x_token)
     @client.connect app.config.connection_string
     @client.invoke 'route', ipc_pack, (err, res, more) ->
       if err
