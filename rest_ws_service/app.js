@@ -4,17 +4,26 @@ var http = require("http"),
     zerorpc = require("zerorpc"),
     formidable = require("formidable"),
     config = require("./config"),
-    ws = require('ws');
+    ws = require('ws'),
+    ua_parser = require('ua-parser');
 
 
-function form_ipc_pack(pathname, headers, http_method, params) {
-    var query_params = querystring.parse(params);
-
-    return {api_method: pathname,
-            api_type: http_method,
-            token: headers['token'],
-            x_token: headers['x-token'],
-            query_params: query_params};
+function makeIpcPack(request) {
+    var parsed_url = url.parse(request.url),
+        user_agent = request.headers['user-agent'];
+    return {
+        api_method: parsed_url.pathname,
+        api_type: request.method.toLocaleLowerCase(),
+        token: request.headers['token'],
+        x_token: request.headers['x-token'],
+        query_params: parsed_url.query_params,
+        meta: {
+            ip_address: request.headers['x-forwarded-for'] || request.connection.remoteAddress || request.socket.remoteAddress || request.connection.socket.remoteAddress,
+            vendor: ua_parser.parseDevice(user_agent).family,
+            os: ua_parser.parseOS(user_agent).family.toLowerCase(),
+            browser: ua_parser.parseUA(user_agent).toString()
+        }
+    };
 }
 
 function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы общепринятое правило прятать всё в функцию
@@ -23,16 +32,10 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
 
     backend_client.connect("tcp://"+bck_host+":"+bck_port);
     var server = http.createServer(function(request, response) {
-        var parsed_url = url.parse(request.url),
-            pathname = parsed_url.pathname,
-            query_params = parsed_url.query,
-            http_method = request.method.toLowerCase(),
-            headers = request.headers;
 
-        if (["post", "put"].indexOf(http_method)>-1) {
+        if (["post", "put"].indexOf(request.method.toLocaleLowerCase())>-1) {
             var form = new formidable.IncomingForm();
-            IPC_pack = form_ipc_pack(pathname, headers, http_method, query_params);
-
+            IPC_pack = makeIpcPack(request);
             form.maxFieldsSize = 1024;  // TODO: не заваливается, если любое поле содержит больше данных
             form.maxFields = 6;
             form.parse(request, function(error, fields, files) {
@@ -68,7 +71,7 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
         }
 
         else {
-            IPC_pack = form_ipc_pack(pathname, headers, http_method, query_params);
+            IPC_pack = makeIpcPack(request);
             backend_client.invoke("route", IPC_pack, function(error, res, more) {
                 if (error) {
                     console.log(error);
