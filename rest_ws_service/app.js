@@ -54,7 +54,7 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
                         response.writeHead(404, {"Content-Type": "text/plain"});
                         response.end('Undefined response');
                     }
-                    else if (res.hasOwnProperty('error')) {
+                    else if (res.hasOwnProperty('exception')) {
                         var code = parseInt(res.error.code);
                         response.writeHead(code, {"Content-Type": "text/plain"});
                         response.end(res.error.message);
@@ -82,7 +82,7 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
                     response.writeHead(404, {"Content-Type": "text/plain"});
                     response.end('Undefined response');
                 }
-                else if (res.hasOwnProperty('error')) {
+                else if (res.hasOwnProperty('exception')) {
                     var code = parseInt(res.error.code);
                     response.writeHead(code, {"Content-Type": "text/plain"});
                     response.end(res.error.message);
