@@ -181,6 +181,12 @@ class Template
     arguments.splice(1, 0, "post")
     @_api arguments
 
+  api_put: () ->
+    # method, param_name/callback [, args] [, params]
+    # call api with arguments and method_type = put
+    arguments.splice(1, 0, "put")
+    @_api arguments
+
   api_delete: () ->
     # method, param_name/callback [, args] [, params]
     # call api with arguments and method_type = delete

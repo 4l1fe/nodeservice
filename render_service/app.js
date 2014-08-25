@@ -42,7 +42,7 @@
     return result;
   };
 
-  this.makeIpcPack = function(method, method_type, params, token, x_token) {
+  this.makeIpcPack = function(method, method_type, params, token, x_token, meta) {
     var ipc_pack;
     if (token == null) {
       token = null;
@@ -50,12 +50,16 @@
     if (x_token == null) {
       x_token = null;
     }
+    if (meta == null) {
+      meta = {};
+    }
     ipc_pack = {
       api_method: method,
       api_type: method_type,
       token: token,
       x_token: x_token,
-      query_params: params
+      query_params: params,
+      meta: meta
     };
     return ipc_pack;
   };

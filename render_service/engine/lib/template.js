@@ -228,6 +228,11 @@
       return this._api(arguments);
     };
 
+    Template.prototype.api_put = function() {
+      arguments.splice(1, 0, "put");
+      return this._api(arguments);
+    };
+
     Template.prototype.api_delete = function() {
       arguments.splice(1, 0, "delete");
       return this._api(arguments);

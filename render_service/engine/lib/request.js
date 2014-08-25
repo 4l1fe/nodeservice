@@ -96,15 +96,15 @@
     };
 
     Request.prototype.user_is_auth = function() {
-      return false;
+      return this.app.api.call('/internal/auth/check', 'get', {}, {});
     };
 
     Request.prototype.auth_user = function() {
-      return null;
+      return this.app.api.call('/internal/info/user', 'get', {}, {});
     };
 
     Request.prototype.session = function() {
-      return {};
+      return this.app.api.call('/internal/info/session', 'get', {}, {});
     };
 
     Request.prototype.response = function(code, html) {

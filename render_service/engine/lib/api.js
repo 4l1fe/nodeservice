@@ -27,12 +27,12 @@
           method = method.replace(":" + key, val);
         }
       }
-      ipc_pack = app.makeIpcPack(method, method_type, params, params.token, params.x_token);
+      ipc_pack = app.makeIpcPack(method, method_type, params, params.token, params.x_token, params.meta);
       this.client.connect(app.config.connection_string);
       return this.client.invoke('route', ipc_pack, function(err, res, more) {
         var e;
         if (err) {
-          return callback(500);
+          return callback(err.code);
         } else {
           try {
             return callback(200, res);

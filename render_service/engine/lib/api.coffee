@@ -31,11 +31,11 @@ class Api
       for own key, val of args
         method = method.replace(":" + key, val)
 
-    ipc_pack = app.makeIpcPack(method, method_type, params, params.token, params.x_token)
+    ipc_pack = app.makeIpcPack(method, method_type, params, params.token, params.x_token, params.meta)
     @client.connect app.config.connection_string
     @client.invoke 'route', ipc_pack, (err, res, more) ->
       if err
-        callback 500
+        callback err.code
       else
         try
           callback 200, res

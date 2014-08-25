@@ -33,7 +33,7 @@
   result
 
 # function to make ipc_pack
-@makeIpcPack = (method, method_type, params, token=null, x_token=null) ->
+@makeIpcPack = (method, method_type, params, token = null, x_token = null, meta = {}) ->
   # method - method path (/user/info or /films/1/info)
   # method_type - type of request: get, post, delete
   # params - params for method call
@@ -43,6 +43,7 @@
     token: token
     x_token: x_token
     query_params: params
+    meta: meta
 
   return ipc_pack
 

@@ -82,18 +82,18 @@ class Request
 
   # check if user is authenticated
   user_is_auth: ->
-    #TODO implement
-    return false
+    # TODO: not working
+    return @app.api.call '/internal/auth/check', 'get', {}, {}
 
   # return auth user if authenticated
   auth_user: ->
-    #TODO implement
-    return null
+    # TODO: not working
+    return @app.api.call '/internal/info/user', 'get', {}, {}
 
   # return session if set
   session: ->
-    #TODO implement
-    return {}
+    # TODO: not working
+    return @app.api.call '/internal/info/session', 'get', {}, {}
 
   # output html with code to user and ends request
   response: (code, html = undefined) ->
