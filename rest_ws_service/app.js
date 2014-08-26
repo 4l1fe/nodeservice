@@ -13,10 +13,10 @@ function makeIpcPack(request) {
         user_agent = request.headers['user-agent'];
     return {
         api_method: parsed_url.pathname,
-        api_type: request.method.toLocaleLowerCase(),
+        api_type: request.method.toLowerCase(),
         token: request.headers['token'],
         x_token: request.headers['x-token'],
-        query_params: parsed_url.query_params,
+        query_params: querystring.parse(parsed_url.query),
         meta: {
             ip_address: request.headers['x-forwarded-for'] || request.connection.remoteAddress || request.socket.remoteAddress || request.connection.socket.remoteAddress,
             vendor: ua_parser.parseDevice(user_agent).family,
@@ -33,7 +33,7 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
     backend_client.connect("tcp://"+bck_host+":"+bck_port);
     var server = http.createServer(function(request, response) {
 
-        if (["post", "put"].indexOf(request.method.toLocaleLowerCase())>-1) {
+        if (["post", "put"].indexOf(request.method.toLowerCase())>-1) {
             var form = new formidable.IncomingForm();
             IPC_pack = makeIpcPack(request);
             form.maxFieldsSize = 1024;  // TODO: не заваливается, если любое поле содержит больше данных
@@ -55,9 +55,9 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
                         response.end('Undefined response');
                     }
                     else if (res.hasOwnProperty('exception')) {
-                        var code = parseInt(res.error.code);
+                        var code = parseInt(res.exception.code);
                         response.writeHead(code, {"Content-Type": "text/plain"});
-                        response.end(res.error.message);
+                        response.end(res.exception.message);
                     }
                     else {
                         response.writeHead(200, {"Content-Type": "application/json"});
@@ -83,9 +83,9 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
                     response.end('Undefined response');
                 }
                 else if (res.hasOwnProperty('exception')) {
-                    var code = parseInt(res.error.code);
+                    var code = parseInt(res.exception.code);
                     response.writeHead(code, {"Content-Type": "text/plain"});
-                    response.end(res.error.message);
+                    response.end(res.exception.message);
                 }
                 else {
                     response.writeHead(200, {"Content-Type": "application/json"});
