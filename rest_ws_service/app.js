@@ -48,11 +48,11 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
                     if (error) {
                         console.log(error);
                         response.writeHead(404, {"Content-Type": "text/plain"});
-                        response.end('Error');
+                        response.end('Not found');
                     }
                     if (!res && res != []) {
                         response.writeHead(404, {"Content-Type": "text/plain"});
-                        response.end('Undefined response');
+                        response.end('Not found');
                     }
                     else if (res.hasOwnProperty('exception')) {
                         var code = parseInt(res.exception.code);
@@ -76,11 +76,11 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
                 if (error) {
                     console.log(error);
                     response.writeHead(404, {"Content-Type": "text/plain"});
-                    response.end('Error');
+                    response.end('Not found');
                 }
                 if (!res && res != []) {
                     response.writeHead(404, {"Content-Type": "text/plain"});
-                    response.end('Undefined response');
+                    response.end('Not found');
                 }
                 else if (res.hasOwnProperty('exception')) {
                     var code = parseInt(res.exception.code);
