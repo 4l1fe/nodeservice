@@ -31,7 +31,7 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
         IPC_pack;
 
     backend_client.connect("tcp://"+bck_host+":"+bck_port);
-    var server = http.createServer(function(request, response) {
+    var http_server = http.createServer(function(request, response) {
 
         if (["post", "put"].indexOf(request.method.toLowerCase())>-1) {
             var form = new formidable.IncomingForm();
@@ -48,11 +48,11 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
                     if (error) {
                         console.log(error);
                         response.writeHead(404, {"Content-Type": "text/plain"});
-                        response.end('Not found');
+                        response.end('Not Found');
                     }
                     if (!res && res != []) {
                         response.writeHead(404, {"Content-Type": "text/plain"});
-                        response.end('Not found');
+                        response.end('Not Found');
                     }
                     else if (res.hasOwnProperty('exception')) {
                         var code = parseInt(res.exception.code);
@@ -76,11 +76,11 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
                 if (error) {
                     console.log(error);
                     response.writeHead(404, {"Content-Type": "text/plain"});
-                    response.end('Not found');
+                    response.end('Not Found');
                 }
                 if (!res && res != []) {
                     response.writeHead(404, {"Content-Type": "text/plain"});
-                    response.end('Not found');
+                    response.end('Not Found');
                 }
                 else if (res.hasOwnProperty('exception')) {
                     var code = parseInt(res.exception.code);
@@ -94,26 +94,32 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
             });
         }
     });
-    server.listen(port, host, function() {
+    http_server.listen(port, host, function() {
        console.log("rest server runnig on "+host+":"+port);
     });
 
-    var ws_server = new ws.Server({server: server});
+    var ws_server = new ws.Server({server: http_server});
     ws_server.on('connection', function(socket){
         socket.on("message", function(message){
             IPC_pack = JSON.parse(message);
             backend_client.invoke("route", IPC_pack, function(error, res, more) {
-                if (!res) {
+                if (error) {
+                    console.log(error);
+                    socket.send(error.message);
+                }
+                else if (!res) {
                     socket.send('Undefined response');
                 }
-                else if (res.hasOwnProperty('error')) {
-                    socket.send(JSON.stringify({'error': res.error.code}));
+                else if (res.hasOwnProperty('exception')) {
+                    socket.send(JSON.stringify({'code': res.exception.code,
+                                                'message': res.exception.message}));
                 }
                 else {
                     socket.send(JSON.stringify(res));
                 }
             });
         });
+
     });
     ws_server.on('error', function(error) {
        console.error(error)
