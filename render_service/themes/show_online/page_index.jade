@@ -1,0 +1,111 @@
+doctype html
+html
+    include config
+    include mixins
+    include head
+    body
+        include header
+
+        section.info-teaser
+            .container
+                .info-teaser-top
+                    h1.info-header Нравятся реалити-шоу «Дом 2» или сериал «Физрук»?
+                    h2 Смотрите новые серии в любое удобное для вас время на нашем сайте!
+                    .info-teaser-hr.margin0a &nbsp;
+                .info-teaser-bottom.container-fluid
+                    p Пройдите быструю регистрацию с помощью своего телефона и получите возможность
+                    .row.info-teaser-features.margin0a
+                        .info-teaser-feature.col-md-4
+                            i.sprite.sprite-i-teaser-watch
+                            p
+                                | Подписываться и смотреть
+                                br
+                                | все выписки сериалов
+                        .info-teaser-feature.col-md-4
+                            i.sprite.sprite-i-teaser-notice
+                            p
+                                | Получать уведомления
+                                br
+                                | о выходе новых серий
+                        .info-teaser-feature.col-md-4
+                            i.sprite.sprite-i-teaser-comment
+                            p
+                                | Комментировать и обсуждать
+                                br
+                                | видео вместе с друзьями
+
+                    form(role="form").form-inline.info-teaser-form
+                        .form-group
+                            input(type="text", placeholder="Введите номер телефона").form-control
+                            button(type="button").btn.btn-success Зарегистрироваться
+        .shadow-container
+            section.casts-list
+                .container
+                    .casts-list-inner
+                        .tab-btn-group
+                            span.tab-btn.tab-btn-active Новое
+                                .tab-arrow
+
+                            span.tab-btn Популярное
+
+                        .row
+                            each film in films
+                                .col-md-2.cast-thumb
+                                    mixin film_thumb(film)
+
+            section.news-block
+                .container
+                    h3 Новости
+
+                    .row
+                        .col-md-6
+                            img(src=img_url + 'news-poster.jpg')
+                        .col-md-6
+                            .row
+                                each news_item in news_list
+                                    .col-md-6
+                                        .cast-news-def
+                                            if news_item.img_url && news_item.img_url.length > 0
+                                                img(src=news_item.img_url, alt=news_item.cast_name, title=news_item.cast_name).cast-img
+                                            - date_str = date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear()
+                                            .cast-news-header
+                                                span.cast-name=news_item.cast_name
+                                                span.cast-date= ' / ' + date_str
+                                            .cast-news-text
+                                                a(href="#")=news_item.title
+            section.main-chat
+                .container
+                    h3 Чат
+                    .row.border-wrapper
+                        .col-md-9.chat-items-list
+                            each chat_item in chat_items
+                                .chat-item
+                                    - user_url = '/users/' + chat_item.user.id
+                                    a(href=user_url)=chat_item.user.name + ':'
+                                    = ' '
+                                    span=chat_item.text
+                            form.form
+                                input(type='text', placeholder='Введите сообщение и нажмите Enter').form-control.chat-msg-input
+                        .col-md-3.chat-users-list
+                            ul
+                                each user in chat_users
+                                    - is_away_class = user.is_away ? 'is-away' : ''
+                                    li.chat-user(class=is_away_class)
+                                        - user_url = '/users/' + user.id
+
+                                        a(href=user_url)=user.name
+
+            section.bottom-block
+                .container
+                    .row
+                        .col-md-4
+                            h3 Рейтинг звезд
+                            .top-stars-list
+                        .col-md-4
+                            h3 Рейтинг пользователей
+                            .top-users-list
+                        .col-md-4
+                            h3 Мы в соц.сетях
+
+
+            include footer

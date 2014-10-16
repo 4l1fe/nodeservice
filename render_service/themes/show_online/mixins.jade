@@ -1,0 +1,15 @@
+include config
+
+- months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"]
+
+mixin film_thumb(item)
+    - film_name = item.title + ":" + ( item.season ? (' ' + item.season + " сезон,") : '' ) + ' ' + item.episode + ' серия'
+    - date = new Date(item.start)
+    - date_str = date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear()
+    img(src=item.poster, alt=film_name, title=film_name).cast-poster
+    .cast-thumb-def
+        div.film-name
+            a(href=item.url, title)=film_name
+        i.sprite.sprite-i-icon-clock
+        span=date_str
+
