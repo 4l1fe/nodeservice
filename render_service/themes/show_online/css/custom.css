@@ -259,6 +259,18 @@ h5 {color: #fff;font-size: 14px;font-weight: bold;text-transform: uppercase;}
     background-position: -60px -155px;
 }
 
+.sprite-i-person-rating-star {
+    width: 70px;
+    height: 70px;
+    background-position: -75px 0;
+}
+
+.sprite-i-person-rating-cup {
+    width: 70px;
+    height: 70px;
+    background-position: -75px -75px;
+}
+
 .shadow-container {
     -webkit-box-shadow: 0 0 20px 4px rgba(0,0,0,0.2);
     -moz-box-shadow: 0 0 20px 4px rgba(0,0,0,0.2);
@@ -274,11 +286,19 @@ h5 {color: #fff;font-size: 14px;font-weight: bold;text-transform: uppercase;}
 
 .tab-btn {
     font-size: 14px;
-    padding: 10px 24px 10px 24px;
+    padding-left: 24px;
+    padding-right: 24px;
+    height: 32px;
     vertical-align: middle;
     display: inline-block;
     margin-bottom: 10px;
+    line-height: 32px;
+    margin-right: 6px;
 }
+
+a.tab-btn { text-decoration: none; }
+
+.tab-btn:before { line-height: 32px; }
 
 .tab-btn-active {
     position: relative;
@@ -311,6 +331,36 @@ h5 {color: #fff;font-size: 14px;font-weight: bold;text-transform: uppercase;}
 .tab-arrow { bottom: -10px; }
 .tab-arrow:after { content: ''; bottom: 1px; border-top-color: #fefefe; }
 
+.solid-arrow-left, .solid-arrow-right {
+    display: inline-block;
+    border: 4px solid transparent;
+}
+
+.solid-arrow-right {
+    border-left: 4px solid #808080;
+    border-right: 0;
+    margin: 0 0 2px 2px;
+}
+
+.solid-arrow-left {
+    border-right: 4px solid #808080;
+    border-left: 0;
+    margin: 0 0 2px -2px;
+}
+
+.nav-btn-back, .nav-btn-forward {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    padding: 0;
+    display: inline-block;
+    text-align: center;
+    line-height: 25px;
+    margin-top: 6px;
+    margin-right: 0;
+    margin-left: 6px;
+}
+
 .cast-thumb {
     padding-top: 15px;
     padding-bottom: 5px;
@@ -327,9 +377,9 @@ h5 {color: #fff;font-size: 14px;font-weight: bold;text-transform: uppercase;}
 
 }
 
-.cast-thumb-def {
-    padding-top: 18px;
-}
+.cast-thumb-def { padding-top: 18px; }
+
+.cast-thumb-def .sprite-i-icon-clock { margin-right: 8px; vertical-align: -2px; }
 
 .news-block > .container {
     background: #fafafa;
@@ -424,4 +474,96 @@ h5 {color: #fff;font-size: 14px;font-weight: bold;text-transform: uppercase;}
 }
 .main-chat .chat-user.is-away:before {
     background-position: -50px -155px;
+}
+
+.sprite-i-person-rating-cup,.sprite-i-person-rating-star { margin-left: -28px; }
+.person-rating-item .sprite-i-rating { margin-right: 10px;  }
+
+.person-rating-item .rating-index {
+    display: inline-block;
+    font-size: 26px;
+    font-weight: bold;
+    color: #e0e0e0;
+    /*width: 80px;*/
+    padding-left: 30px;
+    vertical-align: middle;
+}
+
+.rating-index {
+
+
+}
+
+
+.person-rating-item .person-img {
+    display: inline-block;
+}
+
+.person-rating-item .person-def {
+    display: inline-block;
+}
+
+.person-rating-item .person-def {
+    margin-left: 20px;
+    padding-top: 6px;
+    vertical-align: top;
+}
+
+.person-rating-item a.person-name {
+    display: block;
+    color: #74a225;
+    text-decoration: underline;
+    margin-bottom: 8px;
+}
+
+
+.info-block h5 {
+    font-size: 16px;
+    line-height: 25px;
+    font-weight: normal;
+    color: #000;
+    margin-bottom: 15px;
+}
+
+.info-block p {
+    font-size: 14px;
+    line-height: 20px;
+    color: #4c4c4c;
+    margin-bottom: 20px;
+}
+
+.stat-block span {
+    text-align: right;
+    display: inline-block;
+}
+
+.stat-block span b {
+    font-size: 18px;
+    letter-spacing: 0.7px;
+    text-transform: lowercase;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.stat-block span em {
+    display: block;
+    font-size: 18px;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-style: normal;
+    color: #74a225;
+}
+
+.stat-block .views-count, .stat-block .episodes-count, .stat-block .users-count, .stat-block .comments-count {
+    display: inline-block;
+    font-size: 40px;
+    color: #74a225;
+}
+
+footer .container {
+    background: #f2f2f2;
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    padding: 20px 15px 30px 15px
 }

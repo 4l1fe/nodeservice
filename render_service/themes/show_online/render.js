@@ -6,6 +6,7 @@ var fs = require("fs");
 var tplFileName = 'page_index.jade';
 
 var poster_url = "img/posters/";
+var persons_img_url = "img/persons/";
 
 var films = [
     { id: 1, title: "Физрук", season: 1, episode: 17, poster: poster_url + 'pict_1.jpg', duration: 2932, start: "2014-08-12T20:00:00.000Z", url: "#" },
@@ -79,14 +80,32 @@ var chat_users = [
 ];
 
 var top_stars = [
-    {}
+    { id: 1, name: "Андрей Крыжный", rating: 119.5, cast_name: "Физрук", role: "Банан", img_url: persons_img_url + "top_star_1.jpg" },
+    { id: 2, name: "Сильвестр Сталлоне", rating: 119.2, img_url: persons_img_url + "top_star_2.jpg" },
+    { id: 3, name: "Джейсон Стэйтем", rating: 119.1, img_url: persons_img_url + "top_star_3.jpg" },
+    { id: 4, name: "Дольф Лундгрен", rating: 119.0, img_url: persons_img_url + "top_star_4.jpg" },
+    { id: 5, name: "Жан-Клод Ван Дамм", rating: 118.8, img_url: persons_img_url + "top_star_5.jpg" },
+    { id: 6, name: "Терри Крюс", rating: 117.2, img_url: persons_img_url + "top_star_6.jpg" }
 ];
 
 var top_users = [
-
+    { id: 1, name: "Крис Прэтт", rating: 119.5, img_url: persons_img_url + "top_user_1.jpg" },
+    { id: 2, name: "Зои Салдана", rating: 119.2, img_url: persons_img_url + "top_user_2.jpg" },
+    { id: 3, name: "Дэйв Батиста", rating: 119.1, img_url: persons_img_url + "top_user_3.jpg" },
+    { id: 4, name: "Брэдли Купер", rating: 119.0, img_url: persons_img_url + "top_user_4.jpg" },
+    { id: 5, name: "Вин Дизель", rating: 118.8, img_url: persons_img_url + "top_user_5.jpg" },
+    { id: 6, name: "Ли Пейс", rating: 117.2, img_url: persons_img_url + "top_user_6.jpg" }
 ];
 
-var locals = { 'films': films, 'news_list': news_list, 'chat_items': chat_items, 'chat_users': chat_users };
+var stat = {
+    'views_count': 780000, 'episodes_count': 350, 'users_count': 25000, 'comments_count': 7000
+};
+
+var locals = {
+    'films': films, 'news_list': news_list, 'chat_items': chat_items,
+    'chat_users': chat_users, 'top_stars': top_stars, 'top_users': top_users,
+    'stat': stat
+};
 
 var html = jade.renderFile(tplFileName, locals);
 

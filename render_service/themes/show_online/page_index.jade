@@ -43,10 +43,18 @@ html
                 .container
                     .casts-list-inner
                         .tab-btn-group
-                            span.tab-btn.tab-btn-active Новое
+                            .fright
+                                a(href="#").tab-btn.tab-btn-active.nav-btn-back
+                                    .solid-arrow-left
+
+                                a(href="#").tab-btn.tab-btn-active.nav-btn-forward
+                                    .solid-arrow-right
+                            a(href="#").tab-btn.tab-btn-active Новое
                                 .tab-arrow
 
-                            span.tab-btn Популярное
+                            a(href="#").tab-btn Популярное
+
+
 
                         .row
                             each film in films
@@ -95,17 +103,68 @@ html
 
                                         a(href=user_url)=user.name
 
-            section.bottom-block
+            section.social-block
                 .container
                     .row
                         .col-md-4
                             h3 Рейтинг звезд
-                            .top-stars-list
+                            ul.top-stars-list
+                                each item, i in top_stars
+                                    mixin person_rating_thumb(item, i, true)
+                            a(href="#").all-persons Все звезды сайта
                         .col-md-4
                             h3 Рейтинг пользователей
-                            .top-users-list
+                            ul.top-users-list
+                                each item, i in top_users
+                                    mixin person_rating_thumb(item, i, false)
+                            a(href="#").all-persons Все пользователи сайта
                         .col-md-4
                             h3 Мы в соц.сетях
+
+            section.info-block
+                .container
+                    .row
+                        .col-md-9
+                            h5 Бесплатный онлайн кинотеатр шоу онлайн
+                                br
+                                | сериалы и шоу в хорошем качестве всегда приносят настоящее удовольствие
+
+                            p Случалось ли вам отказаться от просмотра интересного фильма из-за того, что его показывали в неудобное время?
+                                | Приходилось ли искать в сети интернет, где смотреть фильмы онлайн?
+                                | А спорить с домашними из-за выбора кино для просмотра по ТВ?
+                            p Все эти проблемы остались в прошлом! Откройте для себя фильмы онлайн  в HD качестве с кинотеатром Шоу Онлайн.
+                                | Мы не просто освобождаем вас от необходимости идти в кинотеатр или изучать программу телепередач — у посетителей нашего ресурса гораздо больше возможностей.
+                            p Онлайн кинотеатр Шоу Онлайн — это самая большая коллекция отечественных и зарубежных фильмов в рунете.
+                                | Наша видеотека насчитывает более 30 тысяч фильмов и видеороликов, доступных для просмотра
+                                | в онлайн, и постоянно пополняется.
+
+                        .col-md-3.statistics
+                            h5 Шоу онлайн в цифрах
+                                .stat-block
+                                    span
+                                        b просмотров видео
+                                        em более
+                                    .views-count=stat.views_count
+
+                                .stat-block
+                                    span
+                                        b просмотров видео
+                                        em более
+                                    .episodes-count=stat.episodes_count
+
+                                .stat-block
+                                    span
+                                        b участников
+                                        em более
+                                    .users-count=stat.users_count
+
+                                .stat-block
+                                    span
+                                        b комментариев
+                                        em более
+                                    .comments-count=stat.comments_count
+
+
 
 
             include footer

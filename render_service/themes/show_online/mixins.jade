@@ -13,3 +13,24 @@ mixin film_thumb(item)
         i.sprite.sprite-i-icon-clock
         span=date_str
 
+mixin person_rating_thumb(item, index, is_star)
+
+        li.person-rating-item
+            - is_first_class = ''
+            if index == 0
+                - is_first_class = 'is-first'
+            .rating-index(class=is_first_class)
+                if index == 0
+                    if is_star
+                        .sprite.sprite-i-person-rating-star
+                    else
+                        .sprite.sprite-i-person-rating-cup
+                else
+                    =(index+1) + " "
+                    | &mdash;
+            img(src=item.img_url, alt="", title="").person-img
+            .person-def
+                - user_url = '/users/' + item.id
+                a(href=user_url).person-name=item.name
+                span.sprite.sprite-i-rating
+                span.rating-text="Рейтинг: " + item.rating
