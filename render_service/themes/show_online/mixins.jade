@@ -14,12 +14,11 @@ mixin film_thumb(item)
         span=date_str
 
 mixin person_rating_thumb(item, index, is_star)
-
-        li.person-rating-item
-            - is_first_class = ''
-            if index == 0
-                - is_first_class = 'is-first'
-            .rating-index(class=is_first_class)
+        - is_first_class = ''
+        if index == 0
+            - is_first_class = 'is-first'
+        li.person-rating-item(class=is_first_class)
+            .rating-index
                 if index == 0
                     if is_star
                         .sprite.sprite-i-person-rating-star
@@ -27,10 +26,16 @@ mixin person_rating_thumb(item, index, is_star)
                         .sprite.sprite-i-person-rating-cup
                 else
                     =(index+1) + " "
-                    | &mdash;
+                    i &mdash;
             img(src=item.img_url, alt="", title="").person-img
             .person-def
                 - user_url = '/users/' + item.id
                 a(href=user_url).person-name=item.name
                 span.sprite.sprite-i-rating
-                span.rating-text="Рейтинг: " + item.rating
+                span.rating-text="Рейтинг: "
+                    i=item.rating
+                if index == 0
+                    .cast-name="Сериал: "
+                        i=item.cast_name
+                    .star-role="Роль: "
+                        i=item.role

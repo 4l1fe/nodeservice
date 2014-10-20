@@ -11,33 +11,37 @@ html
                 .info-teaser-top
                     h1.info-header Нравятся реалити-шоу «Дом 2» или сериал «Физрук»?
                     h2 Смотрите новые серии в любое удобное для вас время на нашем сайте!
-                    .info-teaser-hr.margin0a &nbsp;
-                .info-teaser-bottom.container-fluid
+                .info-teaser-hr.margin0a.hidden-sm.hidden-xs &nbsp;
+                .info-teaser-bottom.container
                     p Пройдите быструю регистрацию с помощью своего телефона и получите возможность
-                    .row.info-teaser-features.margin0a
-                        .info-teaser-feature.col-md-4
-                            i.sprite.sprite-i-teaser-watch
-                            p
-                                | Подписываться и смотреть
-                                br
-                                | все выписки сериалов
-                        .info-teaser-feature.col-md-4
-                            i.sprite.sprite-i-teaser-notice
-                            p
-                                | Получать уведомления
-                                br
-                                | о выходе новых серий
-                        .info-teaser-feature.col-md-4
-                            i.sprite.sprite-i-teaser-comment
-                            p
-                                | Комментировать и обсуждать
-                                br
-                                | видео вместе с друзьями
+                    .info-teaser-features.margin0a
+                        .row
+                            .col-md-4.col-sm-6
+                                .info-teaser-feature
+                                    i.sprite.sprite-i-teaser-watch
+                                    p
+                                        | Подписываться и смотреть
+                                        br
+                                        | все выписки сериалов
+                            .col-md-4.col-sm-6
+                                .info-teaser-feature
+                                    i.sprite.sprite-i-teaser-notice
+                                    p
+                                        | Получать уведомления
+                                        br
+                                        | о выходе новых серий
+                            .col-md-4.col-sm-6
+                                .info-teaser-feature
+                                    i.sprite.sprite-i-teaser-comment
+                                    p
+                                        | Комментировать и обсуждать
+                                        br
+                                        | видео вместе с друзьями
 
-                    form(role="form").form-inline.info-teaser-form
-                        .form-group
-                            input(type="text", placeholder="Введите номер телефона").form-control
-                            button(type="button").btn.btn-success Зарегистрироваться
+                form(role="form").form-inline.info-teaser-form
+                    .form-group
+                        input(type="text", placeholder="Введите номер телефона").form-control
+                        button(type="button").btn.btn-success Зарегистрироваться
         .shadow-container
             section.casts-list
                 .container
@@ -58,7 +62,7 @@ html
 
                         .row
                             each film in films
-                                .col-md-2.cast-thumb
+                                .col-lg-2.col-md-3.col-sm-4.col-xs-6.cast-thumb
                                     mixin film_thumb(film)
 
             section.news-block
@@ -66,21 +70,29 @@ html
                     h3 Новости
 
                     .row
-                        .col-md-6
+                        .col-lg-6.col-md-7.col-sm-12
+                            - news_item = news_list.shift();
                             img(src=img_url + 'news-poster.jpg')
-                        .col-md-6
+
+                        .col-lg-6.col-md-5.col-sm-12
                             .row
                                 each news_item in news_list
-                                    .col-md-6
-                                        .cast-news-def
+                                    .col-md-12.col-lg-6
+                                        .cast-news-item
                                             if news_item.img_url && news_item.img_url.length > 0
                                                 img(src=news_item.img_url, alt=news_item.cast_name, title=news_item.cast_name).cast-img
-                                            - date_str = date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear()
-                                            .cast-news-header
-                                                span.cast-name=news_item.cast_name
-                                                span.cast-date= ' / ' + date_str
-                                            .cast-news-text
-                                                a(href="#")=news_item.title
+                                            .cast-news-def
+                                                - date_str = date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear()
+                                                .cast-news-header
+                                                    span.cast-name=news_item.cast_name
+                                                    span.cast-date= ' / ' + date_str
+                                                .cast-news-text
+                                                    a(href="#")=news_item.title
+                                .col-md-12.col-lg-6
+                                    .cast-news-archive
+                                        a(href="")
+                                            .sprite.sprite-i-news-archive
+                                            span Архив новостей
             section.main-chat
                 .container
                     h3 Чат
@@ -106,19 +118,19 @@ html
             section.social-block
                 .container
                     .row
-                        .col-md-4
+                        .col-md-4.column
                             h3 Рейтинг звезд
                             ul.top-stars-list
                                 each item, i in top_stars
                                     mixin person_rating_thumb(item, i, true)
                             a(href="#").all-persons Все звезды сайта
-                        .col-md-4
+                        .col-md-4.column
                             h3 Рейтинг пользователей
                             ul.top-users-list
                                 each item, i in top_users
                                     mixin person_rating_thumb(item, i, false)
                             a(href="#").all-persons Все пользователи сайта
-                        .col-md-4
+                        .col-md-4.column
                             h3 Мы в соц.сетях
 
             section.info-block
