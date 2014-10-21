@@ -2,6 +2,16 @@ include config
 
 - months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"]
 
+- function format_stat_number(i) {
+-   if( i < 1000 ) {
+-       return '<s>' + i + '</s>';
+-   } else {
+-       big = Math.floor(i/1000);
+-       small = i - big*1000 || '000';
+-       return '<b>' + big + '</b>' + '<s>' + small + '</s>';
+-   }
+- }
+
 mixin film_thumb(item)
     - film_name = item.title + ":" + ( item.season ? (' ' + item.season + " сезон,") : '' ) + ' ' + item.episode + ' серия'
     - date = new Date(item.start)
@@ -18,16 +28,17 @@ mixin person_rating_thumb(item, index, is_star)
         if index == 0
             - is_first_class = 'is-first'
         li.person-rating-item(class=is_first_class)
-            .rating-index
-                if index == 0
-                    if is_star
-                        .sprite.sprite-i-person-rating-star
+            .thumb-wrapper
+                .rating-index
+                    if index == 0
+                        if is_star
+                            .sprite.sprite-i-person-rating-star
+                        else
+                            .sprite.sprite-i-person-rating-cup
                     else
-                        .sprite.sprite-i-person-rating-cup
-                else
-                    =(index+1) + " "
-                    i &mdash;
-            img(src=item.img_url, alt="", title="").person-img
+                        =(index+1) + " "
+                        i &mdash;
+                img(src=item.img_url, alt="", title="").person-img
             .person-def
                 - user_url = '/users/' + item.id
                 a(href=user_url).person-name=item.name
@@ -39,3 +50,16 @@ mixin person_rating_thumb(item, index, is_star)
                         i=item.cast_name
                     .star-role="Роль: "
                         i=item.role
+
+mixin cast_news_item(news_item)
+    .cast-news-item
+        - date = new Date(news_item.date)
+        if news_item.img_url && news_item.img_url.length > 0
+            img(src=news_item.img_url, alt=news_item.cast_name, title=news_item.cast_name).cast-img
+        .cast-news-def
+            - date_str = date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear()
+            .cast-news-header
+                span.cast-name=news_item.cast_name
+                span.cast-date= ' / ' + date_str
+            .cast-news-title
+                a(href="#")=news_item.title

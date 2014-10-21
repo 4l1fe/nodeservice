@@ -1,30 +1,30 @@
 footer(role="contentinfo")
     .container
         .row
-            .col-md-3
-                img(src="", alt="Лого Шоу Онлайн", title="Лого Шоу Онлайн")
-                div © 2014—2015 showonline.com
+            .col-md-3.column
+                img(src=img_url+"site_logo.png", alt="Лого Шоу Онлайн", title="Лого Шоу Онлайн").site-logo
+                p © 2014—2015 showonline.com
                     br
                     | Все права защищены.
-            .col-md-1
-                | Смотрите
-                ul
+            .col-md-1.column
+                h6 Смотрите
+                ul.footer-menu
                     li
                         a(href="#") Физрук
                     li
                         a(href="#") Дом 2
-            .col-md-2
-                | О нас
-                ul
+            .col-md-2.column
+                h6 О нас
+                ul.footer-menu
                     li
                         a(href="#") О проекте
                     li
                         a(href="#") Размещение рекламы
                     li
                         a(href="#") Правообладателям
-            .col-md-3
-                | Пользователям
-                ul
+            .col-md-3.column
+                h6 Пользователям
+                ul.footer-menu
                     li
                         a(href="")
                             | Пользовательское
@@ -36,10 +36,10 @@ footer(role="contentinfo")
                             br
                             | конфиденциальности
 
-            .col-md-3
+            .col-md-3.column.solaris-column
                 p Идея, создание и развитие ресурса:
                 p Solaris Promo Production
-                img(src="", alt="Лого Solaris Promo", title="Лого Solaris Promo")
+                img(src=img_url+"solaris_logo.png", alt="Лого Solaris Promo", title="Лого Solaris Promo").solaris-logo
 
 script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js")
 script(src=js_url+"bootstrap.min.js")

@@ -58,11 +58,9 @@ html
 
                             a(href="#").tab-btn Популярное
 
-
-
                         .row
                             each film in films
-                                .col-lg-2.col-md-3.col-sm-4.col-xs-6.cast-thumb
+                                .col-lg-2.col-md-3.col-sm-4.col-xs-4.cast-thumb
                                     mixin film_thumb(film)
 
             section.news-block
@@ -70,25 +68,26 @@ html
                     h3 Новости
 
                     .row
-                        .col-lg-6.col-md-7.col-sm-12
-                            - news_item = news_list.shift();
-                            img(src=img_url + 'news-poster.jpg')
-
-                        .col-lg-6.col-md-5.col-sm-12
+                        .col-lg-6.col-md-12.col-sm-12
                             .row
-                                each news_item in news_list
-                                    .col-md-12.col-lg-6
-                                        .cast-news-item
-                                            if news_item.img_url && news_item.img_url.length > 0
-                                                img(src=news_item.img_url, alt=news_item.cast_name, title=news_item.cast_name).cast-img
-                                            .cast-news-def
-                                                - date_str = date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear()
-                                                .cast-news-header
-                                                    span.cast-name=news_item.cast_name
-                                                    span.cast-date= ' / ' + date_str
-                                                .cast-news-text
-                                                    a(href="#")=news_item.title
-                                .col-md-12.col-lg-6
+                                - news_item = news_list.shift();
+                                .col-lg-12.col-md-8.col-sm-12
+                                    img(src=img_url + 'news-poster.jpg').news-item-img
+                                .col-lg-12.col-md-4.col-sm-12
+                                    - news_item
+                                    .cast-news-item.is-first
+                                        mixin cast_news_item(news_item)
+                                        .cast-news-text=news_item.text
+                        .col-lg-6.col-md-12.col-sm-12
+                            .row
+                                each news_item, i in news_list
+                                    .col-md-4.col-lg-6.col-sm-6
+                                        mixin cast_news_item(news_item)
+                                    if i > 0 && (i+1) % 2 == 0
+                                        .visible-lg-block.clearboth
+                                    if i > 0 && (i+1) % 3 == 0
+                                        .visible-md-block.clearboth
+                                .col-md-4.col-lg-6.col-sm-6
                                     .cast-news-archive
                                         a(href="")
                                             .sprite.sprite-i-news-archive
@@ -118,25 +117,25 @@ html
             section.social-block
                 .container
                     .row
-                        .col-md-4.column
+                        .col-md-4.col-sm-6.column
                             h3 Рейтинг звезд
                             ul.top-stars-list
                                 each item, i in top_stars
                                     mixin person_rating_thumb(item, i, true)
                             a(href="#").all-persons Все звезды сайта
-                        .col-md-4.column
+                        .col-md-4.col-sm-6.column
                             h3 Рейтинг пользователей
                             ul.top-users-list
                                 each item, i in top_users
                                     mixin person_rating_thumb(item, i, false)
                             a(href="#").all-persons Все пользователи сайта
-                        .col-md-4.column
+                        .col-md-4.col-sm-12.column
                             h3 Мы в соц.сетях
 
             section.info-block
                 .container
                     .row
-                        .col-md-9
+                        .col-md-8
                             h5 Бесплатный онлайн кинотеатр шоу онлайн
                                 br
                                 | сериалы и шоу в хорошем качестве всегда приносят настоящее удовольствие
@@ -150,31 +149,31 @@ html
                                 | Наша видеотека насчитывает более 30 тысяч фильмов и видеороликов, доступных для просмотра
                                 | в онлайн, и постоянно пополняется.
 
-                        .col-md-3.statistics
+                        .col-md-4.statistics
                             h5 Шоу онлайн в цифрах
                                 .stat-block
                                     span
                                         b просмотров видео
                                         em более
-                                    .views-count=stat.views_count
+                                    .stat-number!=format_stat_number(stat.views_count)
 
                                 .stat-block
                                     span
                                         b просмотров видео
                                         em более
-                                    .episodes-count=stat.episodes_count
+                                    .stat-number!=format_stat_number(stat.episodes_count)
 
                                 .stat-block
                                     span
                                         b участников
                                         em более
-                                    .users-count=stat.users_count
+                                    .stat-number!=format_stat_number(stat.users_count)
 
                                 .stat-block
                                     span
                                         b комментариев
                                         em более
-                                    .comments-count=stat.comments_count
+                                    .stat-number!=format_stat_number(stat.comments_count)
 
 
 
