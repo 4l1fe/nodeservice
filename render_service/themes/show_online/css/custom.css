@@ -427,7 +427,7 @@ a.tab-btn.tab-btn-active { color: #666666; }
 
 .cast-news-item { padding-bottom: 30px; }
 
-.cast-news-item.is-first { padding-bottom: 20px; margin-left: -25px; }
+.cast-news-item.is-first { padding-bottom: 20px; }
 
 .cast-news-item .cast-img {
     float: left;
@@ -637,9 +637,14 @@ a.tab-btn.tab-btn-active { color: #666666; }
     padding: 0 30px 80px 30px;
 }
 
+.stat-block { padding-top: 20px; vertical-align: top;}
+
 .stat-block span {
     text-align: right;
     display: inline-block;
+    vertical-align: top;
+    padding-top: 6px;
+    margin-right: 5px;
 }
 
 .stat-block span b {
@@ -648,6 +653,7 @@ a.tab-btn.tab-btn-active { color: #666666; }
     text-transform: lowercase;
     text-decoration: none;
     font-weight: bold;
+    padding-top: 5px;
 }
 
 .stat-block span em {
@@ -663,7 +669,14 @@ a.tab-btn.tab-btn-active { color: #666666; }
 .stat-block .stat-number {
     display: inline-block;
     color: #74a225;
-    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.stat-block:after {
+    content: '';
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
 }
 
 .stat-block .stat-number b {
@@ -714,4 +727,4 @@ footer .site-logo {
 footer .solaris-logo { margin-top: 8px; }
 
 footer p { line-height: 15px; color: #666666; }
-footer .solaris-column { text-align: right; }
+footer .solaris-column { text-align: right; float: right; }

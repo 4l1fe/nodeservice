@@ -1,19 +1,25 @@
 footer(role="contentinfo")
     .container
         .row
-            .col-md-3.column
-                img(src=img_url+"site_logo.png", alt="Лого Шоу Онлайн", title="Лого Шоу Онлайн").site-logo
+            .col-lg-3.col-md-3.col-sm-6.column.solaris-column
+                p Идея, создание и развитие ресурса:
+                p Solaris Promo Production
+                a(href="#")
+                    img(src=img_url+"solaris_logo.png", alt="Лого Solaris Promo", title="Лого Solaris Promo").solaris-logo
+            .col-lg-3.col-md-3.col-sm-6.column
+                a(href="")
+                    img(src=img_url+"site_logo.png", alt="Лого Шоу Онлайн", title="Лого Шоу Онлайн").site-logo
                 p © 2014—2015 showonline.com
                     br
                     | Все права защищены.
-            .col-md-1.column
+            .col-lg-2.col-md-2.col-sm-3.col-sm-offset-1.col-md-offset-0.col-xs-4.column
                 h6 Смотрите
                 ul.footer-menu
                     li
                         a(href="#") Физрук
                     li
                         a(href="#") Дом 2
-            .col-md-2.column
+            .col-lg-2.col-md-2.col-sm-4.col-xs-4.column
                 h6 О нас
                 ul.footer-menu
                     li
@@ -22,7 +28,7 @@ footer(role="contentinfo")
                         a(href="#") Размещение рекламы
                     li
                         a(href="#") Правообладателям
-            .col-md-3.column
+            .col-lg-2.col-md-2.col-sm-3.col-xs-4.column
                 h6 Пользователям
                 ul.footer-menu
                     li
@@ -36,10 +42,7 @@ footer(role="contentinfo")
                             br
                             | конфиденциальности
 
-            .col-md-3.column.solaris-column
-                p Идея, создание и развитие ресурса:
-                p Solaris Promo Production
-                img(src=img_url+"solaris_logo.png", alt="Лого Solaris Promo", title="Лого Solaris Promo").solaris-logo
+
 
 script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js")
 script(src=js_url+"bootstrap.min.js")
