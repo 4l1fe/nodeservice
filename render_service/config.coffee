@@ -18,7 +18,7 @@ yaml = require 'js-yaml'
 @tpl_config_ext = ".config"
 
 # set theme params
-@theme_name = "vcms-test"
+@theme_name = "show_online"
 @theme_path = @themes_path + @theme_name + "/"
 @theme_global_config = @theme_path + ".config"
 

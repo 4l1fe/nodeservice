@@ -26,7 +26,7 @@
 
   this.tpl_config_ext = ".config";
 
-  this.theme_name = "vcms-test";
+  this.theme_name = "show_online";
 
   this.theme_path = this.themes_path + this.theme_name + "/";
 

@@ -1,0 +1,12 @@
+include config
+doctype html
+html
+    head
+        title="Тест на внутренее API"
+    body
+        if user
+            h1=user.id
+            div=user.firstname
+        else
+            h1(style="color: #f00")=simple_error
+

@@ -59,9 +59,10 @@ html
                             a(href="#").tab-btn Популярное
 
                         .row
-                            each film in films
-                                .col-lg-2.col-md-3.col-sm-4.col-xs-4.cast-thumb
-                                    mixin film_thumb(film)
+                            if films && films.length
+                                each film in films
+                                    .col-lg-2.col-md-3.col-sm-4.col-xs-4.cast-thumb
+                                        mixin film_thumb(film)
 
             section.news-block
                 .container
@@ -70,49 +71,53 @@ html
                     .row
                         .col-lg-6.col-md-12.col-sm-12
                             .row
-                                - news_item = news_list.shift();
-                                .col-lg-12.col-md-8.col-sm-12
-                                    img(src=img_url + 'news-poster.jpg').news-item-img
-                                .col-lg-12.col-md-4.col-sm-12
-                                    - news_item
-                                    .cast-news-item.is-first
-                                        mixin cast_news_item(news_item)
-                                        .cast-news-text=news_item.text
+                                if news_list && news_list.length
+                                    - news_item = news_list.shift();
+                                    .col-lg-12.col-md-8.col-sm-12
+                                        img(src=img_url + 'news-poster.jpg').news-item-img
+                                    .col-lg-12.col-md-4.col-sm-12
+                                        - news_item
+                                        .cast-news-item.is-first
+                                            mixin cast_news_item(news_item)
+                                            .cast-news-text=news_item.text
                         .col-lg-6.col-md-12.col-sm-12
                             .row
-                                each news_item, i in news_list
+                                if news_list
+                                    each news_item, i in news_list
+                                        .col-md-4.col-lg-6.col-sm-6
+                                            mixin cast_news_item(news_item)
+                                        if i > 0 && (i+1) % 2 == 0
+                                            .visible-lg-block.clearboth
+                                        if i > 0 && (i+1) % 3 == 0
+                                            .visible-md-block.clearboth
                                     .col-md-4.col-lg-6.col-sm-6
-                                        mixin cast_news_item(news_item)
-                                    if i > 0 && (i+1) % 2 == 0
-                                        .visible-lg-block.clearboth
-                                    if i > 0 && (i+1) % 3 == 0
-                                        .visible-md-block.clearboth
-                                .col-md-4.col-lg-6.col-sm-6
-                                    .cast-news-archive
-                                        a(href="")
-                                            .sprite.sprite-i-news-archive
-                                            span Архив новостей
+                                        .cast-news-archive
+                                            a(href="")
+                                                .sprite.sprite-i-news-archive
+                                                span Архив новостей
             section.main-chat
                 .container
                     h3 Чат
                     .row.border-wrapper
                         .col-md-9.chat-items-list
-                            each chat_item in chat_items
-                                .chat-item
-                                    - user_url = '/users/' + chat_item.user.id
-                                    a(href=user_url)=chat_item.user.name + ':'
-                                    = ' '
-                                    span=chat_item.text
+                            if chat_items && chat_items.length
+                                each chat_item in chat_items
+                                    .chat-item
+                                        - user_url = '/users/' + chat_item.user.id
+                                        a(href=user_url)=chat_item.user.name + ':'
+                                        = ' '
+                                        span=chat_item.text
                             form.form
                                 input(type='text', placeholder='Введите сообщение и нажмите Enter').form-control.chat-msg-input
                         .col-md-3.chat-users-list
                             ul
-                                each user in chat_users
-                                    - is_away_class = user.is_away ? 'is-away' : ''
-                                    li.chat-user(class=is_away_class)
-                                        - user_url = '/users/' + user.id
+                                if chat_users && chat_users.length
+                                    each user in chat_users
+                                        - online_class = !user.online ? 'online' : ''
+                                        li.chat-user(class=online_class)
+                                            - user_url = '/users/' + user.id
 
-                                        a(href=user_url)=user.name
+                                            a(href=user_url)=user.name
 
             section.social-block
                 .container
@@ -120,14 +125,16 @@ html
                         .col-md-4.col-sm-6.column
                             h3 Рейтинг звезд
                             ul.top-stars-list
-                                each item, i in top_stars
-                                    mixin person_rating_thumb(item, i, true)
+                                if top_stars && top_stars.length
+                                    each item, i in top_stars
+                                        mixin person_rating_thumb(item, i, true)
                             a(href="#").all-persons Все звезды сайта
                         .col-md-4.col-sm-6.column
                             h3 Рейтинг пользователей
                             ul.top-users-list
-                                each item, i in top_users
-                                    mixin person_rating_thumb(item, i, false)
+                                if top_users && top_users.length
+                                    each item, i in top_users
+                                        mixin person_rating_thumb(item, i, false)
                             a(href="#").all-persons Все пользователи сайта
                         .col-md-4.col-sm-12.column
                             h3 Мы в соц.сетях
@@ -149,32 +156,34 @@ html
                                 | Наша видеотека насчитывает более 30 тысяч фильмов и видеороликов, доступных для просмотра
                                 | в онлайн, и постоянно пополняется.
 
-                        .col-md-4.statistics
-                            h5 Шоу онлайн в цифрах
-                            .stat-block
-                                span
-                                    b просмотров видео
-                                    em более
-                                .stat-number!=format_stat_number(stat.views_count)
+                        - if (stat)
+                            .col-md-4.statistics
+                                h5 Шоу онлайн в цифрах
+                                .stat-block
+                                    - if (stat.views_count !== undefined)
+                                        span
+                                            b просмотров видео
+                                            em более
+                                        .stat-number!=format_stat_number(stat.views_count)
 
-                            .stat-block
-                                .stat-number!=format_stat_number(stat.episodes_count)
-                                span
-                                    b серий
+                                .stat-block
+                                    - if (stat.episodes_count)
+                                        .stat-number!=format_stat_number(stat.episodes_count)
+                                    span
+                                        b серий
 
-                            .stat-block
-                                span
-                                    b участников
-                                    em более
-                                .stat-number!=format_stat_number(stat.users_count)
+                                .stat-block
+                                    - if (stat.users_count !== undefined)
+                                        span
+                                            b участников
+                                            em более
+                                        .stat-number!=format_stat_number(stat.users_count)
 
-                            .stat-block
-                                span
-                                    b комментариев
-                                    em более
-                                .stat-number!=format_stat_number(stat.comments_count)
-
-
-
+                                .stat-block
+                                    - if (stat.comments_count !== undefined)
+                                        span
+                                            b комментариев
+                                            em более
+                                        .stat-number!=format_stat_number(stat.comments_count)
 
             include footer
