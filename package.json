@@ -1,0 +1,12 @@
+{
+    "dependencies": {
+        "js-yaml": "latest",
+        "formidable": "latest",
+        "jade": "latest",
+        "ws": "latest",
+        "coffee": "latest",
+        "MD5": "latest",
+        "ua-parser": "latest",
+        "zerorpc": "git+https://github.com/dotcloud/zerorpc-node.git"
+    }
+}
