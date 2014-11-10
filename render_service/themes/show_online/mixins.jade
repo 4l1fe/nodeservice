@@ -11,15 +11,32 @@ include config
 -       return '<b>' + big + '</b>' + '<s>' + small + '</s>';
 -   }
 - }
+- function colon_duration_text(sec_total) {
+-   var ho, mi, res, da;
+-   ho = Math.floor(sec_total / 3600);
+-   min = Math.floor( (sec_total - ho*3600) / 60 );
+-   sec = sec_total - ho*3600 - min*60;
+-   if (min < 10) min = '0' + min;
+-   if (sec < 10) sec = '0' + sec;
+-   return (ho ? (ho+':') : '') + min + ':' + sec;
+- }
 
 mixin film_thumb(item)
     - film_name = item.title + ":" + ( item.season ? (' ' + item.season + " сезон,") : '' ) + ' ' + item.episode + ' серия'
     - date = new Date(item.start)
     - date_str = date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear()
-    img(src=item.poster, alt=film_name, title=film_name).cast-poster
+    a(href="#", title="")
+        .lheight0.fsize0
+            .rel.cast-poster-wrapper
+                img(src=item.poster, alt=film_name, title=film_name).cast-poster
+                .cast-play-btn.zmin
+                    .play-triangle
+            if item.duration
+                .rel.zmin
+                    .cast-duration=colon_duration_text(item.duration)
     .cast-thumb-def
         div.film-name
-            a(href=item.url, title)=film_name
+            a(href=item.url, title="")=film_name
         i.sprite.sprite-i-icon-clock
         span=date_str
 
@@ -52,14 +69,13 @@ mixin person_rating_thumb(item, index, is_star)
                         i=item.role
 
 mixin cast_news_item(news_item)
-    .cast-news-item
-        - date = new Date(news_item.date)
-        if news_item.img_url && news_item.img_url.length > 0
-            img(src=news_item.img_url, alt=news_item.cast_name, title=news_item.cast_name).cast-img
-        .cast-news-def
-            - date_str = date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear()
-            .cast-news-header
-                span.cast-name=news_item.cast_name
-                span.cast-date= ' / ' + date_str
-            .cast-news-title
-                a(href="#")=news_item.title
+    - date = new Date(news_item.date)
+    if news_item.img_url && news_item.img_url.length > 0
+        img(src=news_item.img_url, alt=news_item.cast_name, title=news_item.cast_name).cast-news-img
+    .cast-news-def
+        - date_str = date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear()
+        .cast-news-header
+            span.cast-name=news_item.cast_name
+            span.cast-date= ' / ' + date_str
+        .cast-news-title
+            a(href="#")=news_item.title
