@@ -10,8 +10,7 @@ html
             .container
                 .info-teaser-top
                     h1.info-header
-                        nobr
-                            | Нравятся реалити-шоу <wbr> «Дом 2» <wbr/>или сериал «Физрук»?</nobr>
+                       | Нравятся реалити-шоу <nobr>«Дом 2»</nobr> <nobr>или сериал</nobr> «Физрук»?
                     h2 Смотрите новые серии в любое удобное для вас время на нашем сайте!
                 .info-teaser-hr.margin0a &nbsp;
                 .info-teaser-bottom.container
@@ -25,7 +24,7 @@ html
                                     p
                                         | Подписываться и смотреть
                                         br
-                                        | все выписки сериалов
+                                        | все выпуски сериалов
                             .col-md-4.col-sm-6
                                 .info-teaser-feature
                                     em
@@ -93,6 +92,7 @@ html
                                         if i > 0 && (i+1) % 2 == 0
                                             .visible-lg-block.visible-sm-block.clearboth
                                         if i > 0 && (i+1) % 3 == 0
+                                            .visible-md-block.clearboth
                                     .col-md-4.col-lg-6.col-sm-6
                                         .cast-news-archive
                                             a(href="")
