@@ -8,7 +8,6 @@ var http = require("http"),
     ws = require('ws'),
     ua_parser = require('ua-parser'),
     fs = require('fs');
-    path  = require('path');
 
 
 function makeIpcPack(request) {
@@ -38,27 +37,20 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
     var http_server = http.createServer(function(request, response) {
 
         if (["post", "put"].indexOf(request.method.toLowerCase())>-1) {
-            var form = new multiparty.Form({uploadDir: upload_dir});
+            var form = new formidable.IncomingForm();
+                max_file_size = 100 * 1024 * 1024;
+            form.uploadDir = upload_dir;
             IPC_pack = makeIpcPack(request);
 
-            form.on('error', function(error) {
-                console.log(error);
-                response.writeHead(404, {"Content-Type": "text/plain"});
-                response.end();
-            });
             form.on('field', function(name, value) {
                 if (!IPC_pack["query_params"].hasOwnProperty(name)) {
-                    IPC_pack["query_params"][name] = value;
+                            IPC_pack["query_params"][name] = value;
                 };
-//                console.log('IPC_pack');
-//                console.log(IPC_pack);
             });
-            form.on('file', function(name, file) {
-//                console.log('file');
-//                console.log(file);
-                fs.rename(file.path, path.join(path.dirname(file.path), file.originalFilename));
+            form.on('fileBegin', function(name, file) { //для сохранения имени файла, вместо случайного хэша
+                file.path = upload_dir+'/'+file.name;
             });
-            form.on('close', function() {
+            form.on('end', function() {
                 console.log('END');
                 backend_client.invoke("route", IPC_pack, function(error, res, more) {
                     if (error) {
@@ -81,6 +73,10 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                     }
                 });
             });
+            form.on('error', function(error) {
+                console.log(error);
+                response.end(error.message); //TODO:you will have to manually call request.resume()
+            });                             // if you want the request to continue firing 'data' events.
             form.parse(request);
         }
 
