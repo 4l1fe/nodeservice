@@ -7,7 +7,8 @@ var http = require("http"),
     config = require("./config"),
     ws = require('ws'),
     ua_parser = require('ua-parser'),
-    fs = require('fs');
+    fs = require('fs'),
+    path = require('path');
 
 
 function makeIpcPack(request) {
@@ -28,6 +29,7 @@ function makeIpcPack(request) {
     };
 }
 
+
 function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  // якобы общепринятое правило прятать всё в функцию
     var backend_client = new zerorpc.Client(heartbeat == undefined? {}: {heartbeatInterval: heartbeat}),
         IPC_pack;
@@ -35,6 +37,27 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
     fs.mkdir(upload_dir, function(error) {});
     backend_client.connect("tcp://"+bck_host+":"+bck_port);
     var http_server = http.createServer(function(request, response) {
+
+        function route_cbk(error, res, more) { // объекты request/response должны быть в области видимости
+            if (error) {
+                console.log(error);
+                response.writeHead(404, {"Content-Type": "text/plain"});
+                response.end('Not Found');
+            }
+            if (!res && res != []) {
+                response.writeHead(404, {"Content-Type": "text/plain"});
+                response.end('Not Found');
+            }
+            else if (res.hasOwnProperty('exception')) {
+                var code = parseInt(res.exception.code);
+                response.writeHead(code, {"Content-Type": "text/plain"});
+                response.end(res.exception.message);
+            }
+            else {
+                response.writeHead(200, {"Content-Type": "application/json"});
+                response.end(JSON.stringify(res));
+            }
+        }
 
         if (["post", "put"].indexOf(request.method.toLowerCase())>-1) {
             var form = new formidable.IncomingForm();
@@ -48,33 +71,19 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                 };
             });
             form.on('fileBegin', function(name, file) { //для сохранения имени файла, вместо случайного хэша
-                file.path = upload_dir+'/'+file.name;
+                console.log(IPC_pack);
+                if (IPC_pack.token) {
+                    var tokenized_dir = path.join(upload_dir, IPC_pack.token);
+                    fs.mkdir(tokenized_dir, function(error) {})                 //TODO: иногда валилось непонятно почему,
+                    IPC_pack.query_params.filename = IPC_pack.token+'/'+file.name;  //не успевало создать папку перед сохранением файла?
+                    file.path = path.join(tokenized_dir, file.name);
+                }
             });
             form.on('end', function() {
-                console.log('END');
-                backend_client.invoke("route", IPC_pack, function(error, res, more) {
-                    if (error) {
-                        console.log(error);
-                        response.writeHead(404, {"Content-Type": "text/plain"});
-                        response.end('Not Found');
-                    }
-                    if (!res && res != []) {
-                        response.writeHead(404, {"Content-Type": "text/plain"});
-                        response.end('Not Found');
-                    }
-                    else if (res.hasOwnProperty('exception')) {
-                        var code = parseInt(res.exception.code);
-                        response.writeHead(code, {"Content-Type": "text/plain"});
-                        response.end(res.exception.message);
-                    }
-                    else {
-                        response.writeHead(200, {"Content-Type": "application/json"});
-                        response.end(JSON.stringify(res));
-                    }
-                });
+                backend_client.invoke("route", IPC_pack, route_cbk);
             });
             form.on('error', function(error) {
-                console.log(error);
+                console.log(error);           // надо рушить соединение
                 response.end(error.message); //TODO:you will have to manually call request.resume()
             });                             // if you want the request to continue firing 'data' events.
             form.parse(request);
@@ -82,26 +91,7 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
 
         else {
             IPC_pack = makeIpcPack(request);
-            backend_client.invoke("route", IPC_pack, function(error, res, more) {
-                if (error) {
-                    console.log(error);
-                    response.writeHead(404, {"Content-Type": "text/plain"});
-                    response.end('Not Found');
-                }
-                if (!res && res != []) {
-                    response.writeHead(404, {"Content-Type": "text/plain"});
-                    response.end('Not Found');
-                }
-                else if (res.hasOwnProperty('exception')) {
-                    var code = parseInt(res.exception.code);
-                    response.writeHead(code, {"Content-Type": "text/plain"});
-                    response.end(res.exception.message);
-                }
-                else {
-                    response.writeHead(200, {"Content-Type": "application/json"});
-                    response.end(JSON.stringify(res));
-                }
-            });
+            backend_client.invoke("route", IPC_pack, route_cbk)
         }
     });
     http_server.listen(port, host, function() {
