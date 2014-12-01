@@ -3,9 +3,11 @@ var http = require("http"),
     querystring = require("querystring"),
     zerorpc = require("zerorpc"),
     formidable = require("formidable"),
+    multiparty = require("multiparty"),
     config = require("./config"),
     ws = require('ws'),
-    ua_parser = require('ua-parser');
+    ua_parser = require('ua-parser'),
+    fs = require('fs');
 
 
 function makeIpcPack(request) {
@@ -26,24 +28,30 @@ function makeIpcPack(request) {
     };
 }
 
-function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы общепринятое правило прятать всё в функцию
+function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  // якобы общепринятое правило прятать всё в функцию
     var backend_client = new zerorpc.Client(heartbeat == undefined? {}: {heartbeatInterval: heartbeat}),
         IPC_pack;
 
+    fs.mkdir(upload_dir, function(error) {});
     backend_client.connect("tcp://"+bck_host+":"+bck_port);
     var http_server = http.createServer(function(request, response) {
 
         if (["post", "put"].indexOf(request.method.toLowerCase())>-1) {
             var form = new formidable.IncomingForm();
+                max_file_size = 100 * 1024 * 1024;
+            form.uploadDir = upload_dir;
             IPC_pack = makeIpcPack(request);
-            form.maxFieldsSize = 1024;  // TODO: не заваливается, если любое поле содержит больше данных
-            form.maxFields = 6;
-            form.parse(request, function(error, fields, files) {
-                for (var field in fields) {  // заполняем IPC_pack параметрами из методов POST/PUT
-                        if (!IPC_pack["query_params"].hasOwnProperty(field)) {
-                            IPC_pack["query_params"][field] = fields[field];
-                        }
-                }
+
+            form.on('field', function(name, value) {
+                if (!IPC_pack["query_params"].hasOwnProperty(name)) {
+                            IPC_pack["query_params"][name] = value;
+                };
+            });
+            form.on('fileBegin', function(name, file) { //для сохранения имени файла, вместо случайного хэша
+                file.path = upload_dir+'/'+file.name;
+            });
+            form.on('end', function() {
+                console.log('END');
                 backend_client.invoke("route", IPC_pack, function(error, res, more) {
                     if (error) {
                         console.log(error);
@@ -66,8 +74,10 @@ function run_server(host, port, bck_host, bck_port, heartbeat) {  // якобы 
                 });
             });
             form.on('error', function(error) {
-                response.end(error.message);
-            });
+                console.log(error);
+                response.end(error.message); //TODO:you will have to manually call request.resume()
+            });                             // if you want the request to continue firing 'data' events.
+            form.parse(request);
         }
 
         else {
@@ -131,10 +141,11 @@ var host = config.app_host,
     bck_host = config.backend_host,
     bck_port = config.backend_port,
     heartbeat = config.heartbeat;
+    upload_dir = config.upload_dir;
 
 if (config.debug) {
-    run_server(host, port, bck_host, bck_port, heartbeat);
+    run_server(host, port, bck_host, bck_port, upload_dir, heartbeat);
 }
 else {
-    run_server(host, port, bck_host, bck_port);
+    run_server(host, port, bck_host, bck_port, upload_dir);
 }
