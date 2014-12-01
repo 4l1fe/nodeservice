@@ -1,0 +1,46 @@
+doctype html
+html
+    include config
+    include mixins
+    include head
+    body
+        include header
+        .shadow-container
+            section.page-messages
+                .container
+                    .row
+                        .col-md-3
+                            span Переписка
+                            span Лента
+                            .users-list
+                                if users && users.length
+                                    each user in users
+                                        a.user-item-def
+                                            img(src=user.avatar, alt="", title="")
+                                            .user-name=user.name
+                        .col-md-6
+                            span Lady GAGA
+                            .sprite.sprite-i-trash-bin
+                            span Удалить переписку
+                            .msg-list
+                                if msg_items && msg_items.length
+                                    each msg_item in msg_items
+                                        .msg-item-wrapper
+                                            img(src=msg_item.user.avatar, alt="", title="")
+                                            div
+                                                span=msg_item.user.name
+                                                span=msg_item.created
+                                                .msg-text=msg_item.text
+
+                                .msg-item-wrapper
+                                    img(src=current_user.avatar, alt="", title="")
+                                    textarea(placeholder="Нажмите Enter, чтобы отправить")
+                        .col-md-3
+                            h3 Рекомендуемые
+                                if recomended_casts && recomended_casts.length
+                                    each item in recomended_casts
+                                        mixin film_thumb(item)
+
+
+
+            include footer

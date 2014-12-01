@@ -79,4 +79,10 @@ mixin cast_news_item(news_item)
             span.cast-date= ' / ' + date_str
         .cast-news-title
             a(href="#")=news_item.title
+        .cast-news-text=news_item.text
+        - if( news_item.comments_count != null ) {
+            .cast-news-comments-count
+                span.sprite.sprite-i-speech-bubble
+                em=news_item.comments_count
+        - }
     .clearboth
