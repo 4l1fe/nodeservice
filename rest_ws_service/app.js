@@ -44,6 +44,7 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                 response.writeHead(404, {"Content-Type": "text/plain"});
                 response.end('Not Found');
             }
+            
             if (!res && res != []) {
                 response.writeHead(404, {"Content-Type": "text/plain"});
                 response.end('Not Found');
@@ -52,6 +53,14 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                 var code = parseInt(res.exception.code);
                 response.writeHead(code, {"Content-Type": "text/plain"});
                 response.end(res.exception.message);
+            }
+            else if (res.hasOwnProperty('social')) {
+                response.writeHead(302, {"Location": res['redirect_url']});
+                response.end();
+            }
+            else if (res.hasOwnProperty('social_token')) {
+                response.writeHead(302, {"Location": "/", "Set-Cookie": "global_token="+res['token']+"; path=/"});
+                response.end();
             }
             else {
                 response.writeHead(200, {"Content-Type": "application/json"});
