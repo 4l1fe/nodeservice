@@ -1,0 +1,30 @@
+doctype html
+html
+    include config
+    include mixins
+    include head
+    body
+        include header
+
+        section(style="height: 100%; background: #fafafa;").page-error404
+            .container(style="height: 100%;")
+                .tape-camera-light
+                .tape-camera-light3
+                .row
+                    .col-md-6
+                        .tape-camera
+                            - tape_camera_url = img_url + "tape-camera-picture.png"
+                            img(src=tape_camera_url)
+                    .col-md-6
+                        h3 Страница не найдена
+
+                        p Ошибка 404. К сожалению запрашиваемая вами страница не найдена.
+
+                        span Возможные причины:
+                        ul
+                            li Вы выбрали неправильный адрес.
+                            li Страница была удалена с сайта или никогда не существовала
+                        span Что делать?
+                        ul
+                            li Убедитесь что набираемый адрес правильный.
+                            li Начните пользоваться сайтом с главной страницы.
