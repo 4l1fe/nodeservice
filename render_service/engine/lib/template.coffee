@@ -205,8 +205,8 @@ class Template
   user_is_auth: ->
     @req.user_is_auth()
 
-  auth_user: ->
-    @req.auth_user()
+  auth_user: (callback) ->
+    @req.auth_user callback
 
   session: ->
     @req.session()
