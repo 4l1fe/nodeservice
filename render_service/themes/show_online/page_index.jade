@@ -46,151 +46,152 @@ html
                     .form-group
                         input(type="text", placeholder="Введите номер телефона").form-control
                         button(type="button").btn.btn-success Зарегистрироваться
-        .shadow-container
-            section.casts-list
-                .container
-                    .casts-list-inner
-                        .tab-btn-group
-                            .fright
-                                a(href="#").tab-btn.tab-btn-active.nav-btn-back
-                                    .solid-arrow-left
+        .shadow-container-wrapper
+            .shadow-container
+                section.casts-list
+                    .container
+                        .casts-list-inner
+                            .tab-btn-group
+                                .fright
+                                    a(href="#").tab-btn.tab-btn-active.nav-btn-back
+                                        .solid-arrow-left
 
-                                a(href="#").tab-btn.tab-btn-active.nav-btn-forward
-                                    .solid-arrow-right
-                            a(href="#").tab-btn.tab-btn-active Новое
-                                .tab-arrow
+                                    a(href="#").tab-btn.tab-btn-active.nav-btn-forward
+                                        .solid-arrow-right
+                                a(href="#").tab-btn.tab-btn-active Новое
+                                    .tab-arrow
 
-                            a(href="#").tab-btn Популярное
+                                a(href="#").tab-btn Популярное
+
+                            .row
+                                if films && films.length
+                                    each film in films
+                                        .col-lg-2.col-md-3.col-sm-4.col-xs-4.cast-thumb
+                                            mixin film_thumb(film)
+
+                section.news-block
+                    .container
+                        h3 Новости
 
                         .row
-                            if films && films.length
-                                each film in films
-                                    .col-lg-2.col-md-3.col-sm-4.col-xs-4.cast-thumb
-                                        mixin film_thumb(film)
-
-            section.news-block
-                .container
-                    h3 Новости
-
-                    .row
-                        .col-lg-6.col-md-12.col-sm-12
-                            .row
-                                if news_list && news_list.length
-                                    - news_item = news_list.shift();
-                                    .col-lg-12.col-md-8.col-sm-12.cast-news-item.is-first
-                                        img(src=news_item.img_url).cast-img
-                                    - news_item.img_url = null
-                                    .col-lg-12.col-md-4.col-sm-12.cast-news-item.is-first
-                                        mixin cast_news_item(news_item)
-                        .col-lg-6.col-md-12.col-sm-12
-                            .row
-                                if news_list
-                                    each news_item, i in news_list
-                                        .col-md-4.col-lg-6.col-sm-6.cast-news-item
+                            .col-lg-6.col-md-12.col-sm-12
+                                .row
+                                    if news_list && news_list.length
+                                        - news_item = news_list.shift();
+                                        .col-lg-12.col-md-8.col-sm-12.cast-news-item.is-first
+                                            img(src=news_item.img_url).cast-img
+                                        - news_item.img_url = null
+                                        .col-lg-12.col-md-4.col-sm-12.cast-news-item.is-first
                                             mixin cast_news_item(news_item)
-                                        if i > 0 && (i+1) % 2 == 0
-                                            .visible-lg-block.visible-sm-block.clearboth
-                                        if i > 0 && (i+1) % 3 == 0
-                                            .visible-md-block.clearboth
-                                    .col-md-4.col-lg-6.col-sm-6
-                                        .cast-news-archive
-                                            a(href="")
-                                                .sprite.sprite-i-news-archive
-                                                span Архив новостей
+                            .col-lg-6.col-md-12.col-sm-12
+                                .row
+                                    if news_list
+                                        each news_item, i in news_list
+                                            .col-md-4.col-lg-6.col-sm-6.cast-news-item
+                                                mixin cast_news_item(news_item)
+                                            if i > 0 && (i+1) % 2 == 0
+                                                .visible-lg-block.visible-sm-block.clearboth
+                                            if i > 0 && (i+1) % 3 == 0
+                                                .visible-md-block.clearboth
+                                        .col-md-4.col-lg-6.col-sm-6
+                                            .cast-news-archive
+                                                a(href="")
+                                                    .sprite.sprite-i-news-archive
+                                                    span Архив новостей
 
-            section.main-chat
-                .container
-                    h3 Чат
-                    .row.border-wrapper
-                        .col-md-9.chat-items-block
-                            .chat-items-list-wrapper
-                                .chat-items-list
-                                    if chat_items && chat_items.length
-                                        each chat_item in chat_items
-                                            .chat-item
-                                                - user_url = '/users/' + chat_item.user.id
-                                                a(href=user_url)=chat_item.user.name + ':'
-                                                = ' '
-                                                span=chat_item.text
-                            form.form.chat-msg-form
-                                input(type='text', placeholder='Введите сообщение и нажмите Enter').form-control.chat-msg-input
-                        .col-md-3.hidden-sm.hidden-xs.chat-users-block
-                            .chat-users-list-wrapper
-                                .chat-users-list
-                                    ul
-                                        if chat_users && chat_users.length
-                                            each user in chat_users
-                                                - online_class = !user.online ? 'online' : ''
-                                                li.chat-user(class=online_class)
-                                                    - user_url = '/users/' + user.id
+                section.main-chat
+                    .container
+                        h3 Чат
+                        .row.border-wrapper
+                            .col-md-9.chat-items-block
+                                .chat-items-list-wrapper
+                                    .chat-items-list
+                                        if chat_items && chat_items.length
+                                            each chat_item in chat_items
+                                                .chat-item
+                                                    - user_url = '/users/' + chat_item.user.id
+                                                    a(href=user_url)=chat_item.user.name + ':'
+                                                    = ' '
+                                                    span=chat_item.text
+                                form.form.chat-msg-form
+                                    input(type='text', placeholder='Введите сообщение и нажмите Enter').form-control.chat-msg-input
+                            .col-md-3.hidden-sm.hidden-xs.chat-users-block
+                                .chat-users-list-wrapper
+                                    .chat-users-list
+                                        ul
+                                            if chat_users && chat_users.length
+                                                each user in chat_users
+                                                    - online_class = !user.online ? 'online' : ''
+                                                    li.chat-user(class=online_class)
+                                                        - user_url = '/users/' + user.id
 
-                                                    a(href=user_url)=user.name
+                                                        a(href=user_url)=user.name
 
-            section.social-block
-                .container
-                    .row
-                        .col-lg-4.col-md-6.col-sm-6.column
-                            h3 Рейтинг звезд
-                            ul.top-stars-list
-                                if top_stars && top_stars.length
-                                    each item, i in top_stars
-                                        mixin person_rating_thumb(item, i, true)
-                            a(href="#").all-persons Все звезды сайта
-                        .col-lg-4.col-md-6.col-sm-6.column
-                            h3 Рейтинг пользователей
-                            ul.top-users-list
-                                if top_users && top_users.length
-                                    each item, i in top_users
-                                        mixin person_rating_thumb(item, i, false)
-                            a(href="#").all-persons Все пользователи сайта
-                        .col-lg-4.col-md-12.col-sm-12.column
-                            h3 Мы в соц.сетях
+                section.social-block
+                    .container
+                        .row
+                            .col-lg-4.col-md-6.col-sm-6.column
+                                h3 Рейтинг звезд
+                                ul.top-stars-list
+                                    if top_stars && top_stars.length
+                                        each item, i in top_stars
+                                            mixin person_rating_thumb(item, i, true)
+                                a(href="#").all-persons Все звезды сайта
+                            .col-lg-4.col-md-6.col-sm-6.column
+                                h3 Рейтинг пользователей
+                                ul.top-users-list
+                                    if top_users && top_users.length
+                                        each item, i in top_users
+                                            mixin person_rating_thumb(item, i, false)
+                                a(href="#").all-persons Все пользователи сайта
+                            .col-lg-4.col-md-12.col-sm-12.column
+                                h3 Мы в соц.сетях
 
-            section.info-block
-                .container
-                    .row
-                        .col-md-8
-                            h5 Бесплатный онлайн кинотеатр шоу онлайн
-                                br
-                                | сериалы и шоу в хорошем качестве всегда приносят настоящее удовольствие
+                section.info-block
+                    .container
+                        .row
+                            .col-md-8
+                                h5 Бесплатный онлайн кинотеатр шоу онлайн
+                                    br
+                                    | сериалы и шоу в хорошем качестве всегда приносят настоящее удовольствие
 
-                            p Случалось ли вам отказаться от просмотра интересного фильма из-за того, что его показывали в неудобное время?
-                                | Приходилось ли искать в сети интернет, где смотреть фильмы онлайн?
-                                | А спорить с домашними из-за выбора кино для просмотра по ТВ?
-                            p Все эти проблемы остались в прошлом! Откройте для себя фильмы онлайн  в HD качестве с кинотеатром Шоу Онлайн.
-                                | Мы не просто освобождаем вас от необходимости идти в кинотеатр или изучать программу телепередач — у посетителей нашего ресурса гораздо больше возможностей.
-                            p Онлайн кинотеатр Шоу Онлайн — это самая большая коллекция отечественных и зарубежных фильмов в рунете.
-                                | Наша видеотека насчитывает более 30 тысяч фильмов и видеороликов, доступных для просмотра
-                                | в онлайн, и постоянно пополняется.
+                                p Случалось ли вам отказаться от просмотра интересного фильма из-за того, что его показывали в неудобное время?
+                                    | Приходилось ли искать в сети интернет, где смотреть фильмы онлайн?
+                                    | А спорить с домашними из-за выбора кино для просмотра по ТВ?
+                                p Все эти проблемы остались в прошлом! Откройте для себя фильмы онлайн  в HD качестве с кинотеатром Шоу Онлайн.
+                                    | Мы не просто освобождаем вас от необходимости идти в кинотеатр или изучать программу телепередач — у посетителей нашего ресурса гораздо больше возможностей.
+                                p Онлайн кинотеатр Шоу Онлайн — это самая большая коллекция отечественных и зарубежных фильмов в рунете.
+                                    | Наша видеотека насчитывает более 30 тысяч фильмов и видеороликов, доступных для просмотра
+                                    | в онлайн, и постоянно пополняется.
 
-                        - if (stat)
-                            .col-md-4.statistics
-                                h5 Шоу онлайн в цифрах
-                                .stat-block
-                                    - if (stat.views_count !== undefined)
+                            - if (stat)
+                                .col-md-4.statistics
+                                    h5 Шоу онлайн в цифрах
+                                    .stat-block
+                                        - if (stat.views_count !== undefined)
+                                            span
+                                                b просмотров видео
+                                                em более
+                                            .stat-number!=format_stat_number(stat.views_count)
+
+                                    .stat-block
+                                        - if (stat.episodes_count)
+                                            .stat-number!=format_stat_number(stat.episodes_count)
                                         span
-                                            b просмотров видео
-                                            em более
-                                        .stat-number!=format_stat_number(stat.views_count)
+                                            b серий
 
-                                .stat-block
-                                    - if (stat.episodes_count)
-                                        .stat-number!=format_stat_number(stat.episodes_count)
-                                    span
-                                        b серий
+                                    .stat-block
+                                        - if (stat.users_count !== undefined)
+                                            span
+                                                b участников
+                                                em более
+                                            .stat-number!=format_stat_number(stat.users_count)
 
-                                .stat-block
-                                    - if (stat.users_count !== undefined)
-                                        span
-                                            b участников
-                                            em более
-                                        .stat-number!=format_stat_number(stat.users_count)
+                                    .stat-block
+                                        - if (stat.comments_count !== undefined)
+                                            span
+                                                b комментариев
+                                                em более
+                                            .stat-number!=format_stat_number(stat.comments_count)
 
-                                .stat-block
-                                    - if (stat.comments_count !== undefined)
-                                        span
-                                            b комментариев
-                                            em более
-                                        .stat-number!=format_stat_number(stat.comments_count)
-
-            include footer
+                include footer

@@ -1,6 +1,7 @@
 include config
 
 - months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"]
+- date_now = new Date()
 
 - function format_stat_number(i) {
 -   if( i < 1000 ) {
@@ -20,6 +21,74 @@ include config
 -   if (sec < 10) sec = '0' + sec;
 -   return (ho ? (ho+':') : '') + min + ':' + sec;
 - }
+- function cardinal(val, form1, form2, form3) {
+-   var d10;
+-   if (val > 4 && val < 21) return form3;
+-   d10 = val % 10;
+-   if (d10 == 0 || d10 > 4) return form3;
+-   if (d10 == 1) return form1;
+-   return form2;
+- }
+- function duration_text(min) {
+-   var ho, mi, res, da;
+-   ho = Math.floor(min / 60); mi = min - ho*60;
+-   da = Math.floor(ho / 24); ho = ho % 24
+-   res = da?da + cardinal(da, " день", " дня", " дней"):"";
+-   res+= (res?" ":"") + (ho?ho + cardinal(ho, " час", " часа", " часов"):"");
+-   if (mi) res+= (res?" ":"") + mi + cardinal(mi, " минута", " минуты", " минут")
+-   return res || "0 минут";
+- }
+- function date_text_str(str) {
+-   try {
+-       return date_text(new Date(str));
+-   } catch (e) {
+-       return str;
+-   }
+- }
+- function date_text(dt) {
+-   return dt.getDate() + " " + months[dt.getMonth()] + " " + dt.getFullYear() + " г.";
+- }
+- function time_text_str(str) {
+-   try {
+-       return time_text(new Date(str));
+-   } catch (e) {
+-       return str;
+-   }
+- }
+- function time_text(dt) {
+-   var diff, curday, curtime, ho, text, min, input_day, now_day, at_time, tz_offset;
+-   diff = (date_now.getTime() - dt.getTime()) / 1000;
+-   if (Math.abs(diff) < 60) return "сейчас";
+-   if (Math.abs(diff) < 3600) {
+-     min = Math.floor( Math.abs(diff) / 60);
+-     text = min + cardinal(min, " минуту", " минуты", " минут");
+-     if (diff < 0) {
+-       return "через " + text;
+-     } else {
+-       return text + " назад";
+-     }
+-   }
+-   ho = Math.floor( Math.abs(diff) / 3600);
+-   if (ho <= 6) {
+-     text = ho + cardinal(ho, " час", " часа", " часов");
+-     if( diff < 0 ) {
+-       return "через " + text;
+-     } else {
+-       return text + " назад";
+-     }
+-   }
+-   tz_offset = date_now.getTimezoneOffset() * 60 * 1000;
+-   input_day = Math.floor( (dt.getTime() - tz_offset)  / 86400000 );
+-   now_day = Math.floor( (date_now.getTime() - tz_offset) / 86400000 );
+-   at_time = dt.getHours() + ":" + ( dt.getMinutes() < 10 ? "0"  : "" ) + dt.getMinutes();
+-   if ( now_day == input_day ) {
+-     return "сегодня в " + at_time;
+-   } else if ( now_day == input_day+1 )  {
+-     return "вчера в " + at_time;
+-   }
+-   if (dt.getFullYear() == date_now.getFullYear()) return dt.getDate() + " " + months[dt.getMonth()];
+-   return dt.getDate() + " " + months[dt.getMonth()] + " " + dt.getFullYear();
+- }
 
 mixin film_thumb(item)
     - film_name = item.title + ":" + ( item.season ? (' ' + item.season + " сезон,") : '' ) + ' ' + item.episode + ' серия'
@@ -35,7 +104,7 @@ mixin film_thumb(item)
                 .rel.zmin
                     .cast-duration=colon_duration_text(item.duration)
     .cast-thumb-def
-        div.film-name
+        div.cast-name
             a(href=item.url, title="")=film_name
         i.sprite.sprite-i-icon-clock
         span=date_str

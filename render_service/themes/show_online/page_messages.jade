@@ -3,44 +3,80 @@ html
     include config
     include mixins
     include head
+    - console.log('noavatar_url: ', noavatar_url)
     body
         include header
-        .shadow-container
-            section.page-messages
-                .container
-                    .row
-                        .col-md-3
-                            span Переписка
-                            span Лента
-                            .users-list
-                                if users && users.length
-                                    each user in users
-                                        a.user-item-def
-                                            img(src=user.avatar, alt="", title="")
-                                            .user-name=user.name
-                        .col-md-6
-                            span Lady GAGA
-                            .sprite.sprite-i-trash-bin
-                            span Удалить переписку
-                            .msg-list
-                                if msg_items && msg_items.length
-                                    each msg_item in msg_items
-                                        .msg-item-wrapper
-                                            img(src=msg_item.user.avatar, alt="", title="")
-                                            div
-                                                span=msg_item.user.name
-                                                span=msg_item.created
-                                                .msg-text=msg_item.text
+        .shadow-container-wrapper.page-messages
+            .shadow-container
+                section.page-msg-block
+                    .container
+                        .row
+                            .col-md-3.col-sm-4.col-xs-3.users-column
+                                .column-header
+                                    a(href="#").letters-button Переписка
+                                    a(href="#").feed-button Лента
+                                    .clearboth
+                                .users-list-wrapper
+                                    .users-list
+                                        if users && users.length
+                                            each user in users
+                                                - user_item_class = user.is_selected ? 'is-selected' : '';
+                                                - user_url = "/users/" + user.id
+                                                a.user-item(class=user_item_class, href=user_url)
+                                                    .user-avatar
+                                                        - avatar_url = noavatar_url
+                                                        - if( user.avatar != null && user.avatar.length ) {
+                                                            - avatar_url = user.avatar
+                                                        - }
+                                                        - console.log(avatar_url)
+                                                        img(src=avatar_url, alt="", title="")
+                                                    .user-name=user.name
+                                                    .clearboth
+                            .col-md-6.col-sm-8.col-xs-9.msg-column
+                                .column-header
+                                    a(href="#").selected-user-name Lady GAGA
+                                    .sprite.sprite-i-trash-bin
+                                    a(href="#").delete-msg-history-btn
+                                        .sprite.sprite-i-trash-can
+                                        em Удалить переписку
+                                .msg-list-wrapper
+                                    .msg-list
+                                        if msg_items && msg_items.length
+                                            each msg_item in msg_items
+                                                .msg-item
+                                                    .user-avatar
+                                                        - avatar_url = noavatar_url
+                                                        - if( msg_item.user.avatar != null && msg_item.user.avatar.length ) {
+                                                            - avatar_url = msg_item.user.avatar
+                                                        - }
+                                                        - console.log(avatar_url)
+                                                        img(src=avatar_url, alt="", title="")
+                                                    .msg-item-def
+                                                        - user_url = "/users/" + msg_item.user.id
+                                                        a(href=user_url).user-name=msg_item.user.name
+                                                        span.msg-created=time_text_str(msg_item.created)
+                                                        .msg-text=msg_item.text
+                                                    .clearboth
 
-                                .msg-item-wrapper
-                                    img(src=current_user.avatar, alt="", title="")
-                                    textarea(placeholder="Нажмите Enter, чтобы отправить")
-                        .col-md-3
-                            h3 Рекомендуемые
-                                if recomended_casts && recomended_casts.length
-                                    each item in recomended_casts
-                                        mixin film_thumb(item)
-
-
-
-            include footer
+                                .msg-input-area
+                                    .msg-item
+                                        .msg-item-def
+                                            .user-avatar
+                                                - avatar_url = noavatar_url
+                                                - if( current_user.avatar != null && current_user.avatar.length ) {
+                                                    - avatar_url = current_user.avatar
+                                                - }
+                                                - console.log(avatar_url)
+                                                img(src=avatar_url, alt="", title="")
+                                            .msg-text
+                                                span.textarea-arrow
+                                                textarea(placeholder="Нажмите Enter, чтобы отправить")
+                            .col-md-3.col-sm-3.col-xs-3.good-casts-column.visible-md-block.visible-lg-block
+                                .column-header
+                                    h3 Рекомендуемые
+                                .good-casts-list-wrapper
+                                    .good-casts-list
+                                        if recomended_casts && recomended_casts.length
+                                            each item in recomended_casts
+                                                .cast-thumb
+                                                    mixin film_thumb(item)
