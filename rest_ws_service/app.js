@@ -44,8 +44,7 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                 response.writeHead(404, {"Content-Type": "text/plain"});
                 response.end('Not Found');
             }
-            
-            if (!res && res != []) {
+            if (!res) {
                 response.writeHead(404, {"Content-Type": "text/plain"});
                 response.end('Not Found');
             }
