@@ -58,7 +58,7 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                 response.end();
             }
             else if (res.hasOwnProperty('social_token')) {
-                response.writeHead(302, {"Location": "/", "Set-Cookie": "global_token="+res['token']+"; path=/"});
+                response.writeHead(302, {"Location": "/", "Set-Cookie": "token="+res['token']+"; path=/"});
                 response.end();
             }
             else {
