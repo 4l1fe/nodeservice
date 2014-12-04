@@ -6,17 +6,17 @@ html
     - console.log('noavatar_url: ', noavatar_url)
     body
         include header
-        .shadow-container-wrapper.page-messages
-            .shadow-container
-                section.page-msg-block
-                    .container
-                        .row
-                            .col-md-3.col-sm-4.col-xs-3.users-column
+        .shadow-container-wrapper.is-header-pushed.page-messages.height100rel
+            .shadow-container.height100rel
+                section.page-msg-block.height100rel
+                    .container.height100rel
+                        .row.height100rel
+                            .col-md-3.col-sm-4.col-xs-3.users-column.height100rel
                                 .column-header
                                     a(href="#").letters-button Переписка
                                     a(href="#").feed-button Лента
                                     .clearboth
-                                .users-list-wrapper
+                                .users-list-wrapper.height100rel
                                     .users-list
                                         if users && users.length
                                             each user in users
@@ -32,15 +32,15 @@ html
                                                         img(src=avatar_url, alt="", title="")
                                                     .user-name=user.name
                                                     .clearboth
-                            .col-md-6.col-sm-8.col-xs-9.msg-column
+                            .col-md-6.col-sm-8.col-xs-9.msg-column.height100rel
                                 .column-header
                                     a(href="#").selected-user-name Lady GAGA
                                     .sprite.sprite-i-trash-bin
                                     a(href="#").delete-msg-history-btn
                                         .sprite.sprite-i-trash-can
                                         em Удалить переписку
-                                .msg-list-wrapper
-                                    .msg-list
+                                .msg-list-wrapper.height100rel
+                                    .msg-list.height100rel
                                         if msg_items && msg_items.length
                                             each msg_item in msg_items
                                                 .msg-item
@@ -66,16 +66,15 @@ html
                                                 - if( current_user.avatar != null && current_user.avatar.length ) {
                                                     - avatar_url = current_user.avatar
                                                 - }
-                                                - console.log(avatar_url)
                                                 img(src=avatar_url, alt="", title="")
                                             .msg-text
                                                 span.textarea-arrow
                                                 textarea(placeholder="Нажмите Enter, чтобы отправить")
-                            .col-md-3.col-sm-3.col-xs-3.good-casts-column.visible-md-block.visible-lg-block
+                            .col-md-3.col-sm-3.col-xs-3.good-casts-column.visible-md-block.visible-lg-block.height100rel
                                 .column-header
                                     h3 Рекомендуемые
-                                .good-casts-list-wrapper
-                                    .good-casts-list
+                                .good-casts-list-wrapper.height100rel
+                                    .good-casts-list.height100rel
                                         if recomended_casts && recomended_casts.length
                                             each item in recomended_casts
                                                 .cast-thumb
