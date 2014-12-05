@@ -4,25 +4,25 @@ var persons_img_url = img_url + "persons/";
 
 (function (){
     var prepare = function ($) {
-        $.params("films", [
+        $.params("casts", [
             { id: 1, title: "Физрук", season: 1, episode: 17, poster: poster_url + 'pict_1.jpg', duration: 2932, start: "2014-08-12T20:00:00.000Z", url: "#" },
             { id: 1, title: "Физрук", season: 1, episode: 16, poster: poster_url + 'pict_2.jpg', duration: 3107, start: "2014-08-12T20:00:00.000Z", url: "#" },
-            { id: 1, title: "Дом 2", season: 0, episode: 648, poster: poster_url + 'pict_3.jpg', duration: 2932, start: "2014-08-11T20:00:00.000Z", url: "#" },
+            { id: 1, title: "Дом 2", season: null, episode: 648, poster: poster_url + 'pict_3.jpg', duration: 2932, start: "2014-08-11T20:00:00.000Z", url: "#" },
             { id: 1, title: "Физрук", season: 1, episode: 17, poster: poster_url + 'pict_1.jpg', duration: 2932, start: "2014-08-12T20:00:00.000Z", url: "#" },
             { id: 1, title: "Физрук", season: 1, episode: 16, poster: poster_url + 'pict_2.jpg', duration: 3107, start: "2014-08-12T20:00:00.000Z", url: "#" },
-            { id: 1, title: "Дом 2", season: 0, episode: 648, poster: poster_url + 'pict_3.jpg', duration: 2932, start: "2014-08-11T20:00:00.000Z", url: "#" },
-            { id: 1, title: "Дом 2", season: 0, episode: 647, poster: poster_url + 'pict_4.jpg', duration: 3107, start: "2014-08-10T20:00:00.000Z", url: "#" },
+            { id: 1, title: "Дом 2", season: null, episode: 648, poster: poster_url + 'pict_3.jpg', duration: 2932, start: "2014-08-11T20:00:00.000Z", url: "#" },
+            { id: 1, title: "Дом 2", season: null, episode: 647, poster: poster_url + 'pict_4.jpg', duration: 3107, start: "2014-08-10T20:00:00.000Z", url: "#" },
             { id: 1, title: "Физрук", season: 1, episode: 15, poster: poster_url + 'pict_5.jpg', duration: 2932, start: "2014-08-10T20:00:00.000Z", url: "#" },
             { id: 1, title: "Физрук", season: 1, episode: 14, poster: poster_url + 'pict_6.jpg', duration: 3107, start: "2014-08-08T20:00:00.000Z", url: "#" },
-            { id: 1, title: "Дом 2", season: 0, episode: 647, poster: poster_url + 'pict_4.jpg', duration: 3107, start: "2014-08-10T20:00:00.000Z", url: "#" },
+            { id: 1, title: "Дом 2", season: null, episode: 647, poster: poster_url + 'pict_4.jpg', duration: 3107, start: "2014-08-10T20:00:00.000Z", url: "#" },
             { id: 1, title: "Физрук", season: 1, episode: 15, poster: poster_url + 'pict_5.jpg', duration: 2932, start: "2014-08-10T20:00:00.000Z", url: "#" },
             { id: 1, title: "Физрук", season: 1, episode: 14, poster: poster_url + 'pict_6.jpg', duration: 3107, start: "2014-08-08T20:00:00.000Z", url: "#" },
             { id: 1, title: "Физрук", season: 1, episode: 17, poster: poster_url + 'pict_1.jpg', duration: 2932, start: "2014-08-12T20:00:00.000Z", url: "#" },
             { id: 1, title: "Физрук", season: 1, episode: 16, poster: poster_url + 'pict_2.jpg', duration: 3107, start: "2014-08-12T20:00:00.000Z", url: "#" },
-            { id: 1, title: "Дом 2", season: 0, episode: 648, poster: poster_url + 'pict_3.jpg', duration: 2932, start: "2014-08-11T20:00:00.000Z", url: "#" },
+            { id: 1, title: "Дом 2", season: null, episode: 648, poster: poster_url + 'pict_3.jpg', duration: 2932, start: "2014-08-11T20:00:00.000Z", url: "#" },
             { id: 1, title: "Физрук", season: 1, episode: 17, poster: poster_url + 'pict_1.jpg', duration: 2932, start: "2014-08-12T20:00:00.000Z", url: "#" },
             { id: 1, title: "Физрук", season: 1, episode: 16, poster: poster_url + 'pict_2.jpg', duration: 3107, start: "2014-08-12T20:00:00.000Z", url: "#" },
-            { id: 1, title: "Дом 2", season: 0, episode: 648, poster: poster_url + 'pict_3.jpg', duration: 2932, start: "2014-08-11T20:00:00.000Z", url: "#" }]);
+            { id: 1, title: "Дом 2", season: null, episode: 648, poster: poster_url + 'pict_3.jpg', duration: 2932, start: "2014-08-11T20:00:00.000Z", url: "#" }]);
         $.params("news_list", [
             { cast_name: "Человек года", date: "2014-06-07T20:00:00.000Z", title: 'У Саши и Элины есть договоренность на счет приза в конкурсе "Человек года"', img_url: (img_url + "news-poster_error.jpg"), text: 'До финала "Человека года" осталось совсем немного времени и с каждым днем напряжение среди ребят чувствуется все больше и больше. Особенно нервничает Саша Задойнов...' },
             { cast_name: "Дом 2", date: "2014-08-07T20:00:00.000Z", title: "Фанаты проекта «Дом-2» поняли, зачем на шоу находился Сергей Сичкарь", img_url: null },

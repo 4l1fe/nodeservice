@@ -90,14 +90,24 @@ include config
 -   return dt.getDate() + " " + months[dt.getMonth()] + " " + dt.getFullYear();
 - }
 
-mixin film_thumb(item)
-    - film_name = item.title + ":" + ( item.season ? (' ' + item.season + " сезон,") : '' ) + ' ' + item.episode + ' серия'
-    - date = new Date(item.start)
-    - date_str = date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear()
+mixin cast_thumb(item)
+    - cast_name = ''
+    if item.title != null
+        - cast_name += item.title + ":"
+    if item.season != null
+        - cast_name += ' ' + item.season + ' сезон'
+    if item.season != null && item.episode != null
+        - cast_name += ','
+    if item.episode != null
+        - cast_name += ' ' + item.episode + ' серия'
+    - date_str = null
+    if item.start
+        - date = new Date(item.start)
+        - date_str = date.getDate() + ' ' + months[date.getMonth()] + ' ' + date.getFullYear()
     a(href="#", title="")
         .lheight0.fsize0
             .rel.cast-poster-wrapper
-                img(src=item.poster, alt=film_name, title=film_name).cast-poster
+                img(src=item.poster, alt=cast_name, title=cast_name).cast-poster
                 .cast-play-btn.zmin
                     .play-triangle
             if item.duration
@@ -105,9 +115,10 @@ mixin film_thumb(item)
                     .cast-duration=colon_duration_text(item.duration)
     .cast-thumb-def
         div.cast-name
-            a(href=item.url, title="")=film_name
-        i.sprite.sprite-i-icon-clock
-        span=date_str
+            a(href=item.url, title="")=cast_name
+        if date_str && date_str.length > 0
+            i.sprite.sprite-i-icon-clock
+            span=date_str
 
 mixin person_rating_thumb(item, index, is_star)
         - is_first_class = ''
@@ -155,3 +166,51 @@ mixin cast_news_item(news_item)
                 em=news_item.comments_count
         - }
     .clearboth
+
+mixin casts_list(casts)
+    if casts && casts.length
+        .casts-list-inner
+            .tab-btn-group
+                .fright
+                    a(href="#").tab-btn.tab-btn-active.nav-btn-back
+                        .solid-arrow-left
+
+                    a(href="#").tab-btn.tab-btn-active.nav-btn-forward
+                        .solid-arrow-right
+                a(href="#").tab-btn.tab-btn-active Новое
+                    .tab-arrow
+
+                a(href="#").tab-btn Популярное
+
+            .row
+                each cast in casts
+                    .col-lg-2.col-md-3.col-sm-4.col-xs-4.cast-thumb
+                        mixin cast_thumb(cast)
+
+mixin casts_news_block(news_list)
+    if news_list && news_list.length
+        .row
+            .col-lg-6.col-md-12.col-sm-12
+                .row
+                    if news_list && news_list.length
+                        - news_item = news_list.shift();
+                        .col-lg-12.col-md-8.col-sm-12.cast-news-item.is-first
+                            img(src=news_item.img_url).cast-img
+                        - news_item.img_url = null
+                        .col-lg-12.col-md-4.col-sm-12.cast-news-item.is-first
+                            mixin cast_news_item(news_item)
+            .col-lg-6.col-md-12.col-sm-12
+                .row
+                    if news_list
+                        each news_item, i in news_list
+                            .col-md-4.col-lg-6.col-sm-6.cast-news-item
+                                mixin cast_news_item(news_item)
+                            if i > 0 && (i+1) % 2 == 0
+                                .visible-lg-block.visible-sm-block.clearboth
+                            if i > 0 && (i+1) % 3 == 0
+                                .visible-md-block.clearboth
+                        .col-md-4.col-lg-6.col-sm-6
+                            .cast-news-archive
+                                a(href="")
+                                    .sprite.sprite-i-news-archive
+                                    span Архив новостей
