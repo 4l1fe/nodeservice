@@ -3,7 +3,6 @@ var http = require("http"),
     querystring = require("querystring"),
     zerorpc = require("zerorpc"),
     formidable = require("formidable"),
-    multiparty = require("multiparty"),
     config = require("./config"),
     ws = require('ws'),
     ua_parser = require('ua-parser'),
@@ -14,6 +13,7 @@ var http = require("http"),
 function makeIpcPack(request) {
     var parsed_url = url.parse(request.url),
         user_agent = request.headers['user-agent'];
+
     return {
         api_method: parsed_url.pathname,
         api_type: request.method.toLowerCase(),
@@ -37,6 +37,7 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
     fs.mkdir(upload_dir, function(error) {});
     backend_client.connect("tcp://"+bck_host+":"+bck_port);
     var http_server = http.createServer(function(request, response) {
+        var method_type = request.method.toLowerCase();
 
         function route_cbk(error, res, more) { // объекты request/response должны быть в области видимости
             if (error) {
@@ -44,20 +45,20 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                 response.writeHead(404, {"Content-Type": "text/plain"});
                 response.end('Not Found');
             }
-            if (!res) {
+            else if (!res) {
                 response.writeHead(404, {"Content-Type": "text/plain"});
                 response.end('Not Found');
             }
-            else if (res.hasOwnProperty('exception')) {
-                var code = parseInt(res.exception.code);
+            else if (res['exception']) {
+                var code = parseInt(res['exception']['code']);
                 response.writeHead(code, {"Content-Type": "text/plain"});
-                response.end(res.exception.message);
+                response.end(res['exception']['message']);
             }
-            else if (res.hasOwnProperty('social')) {
+            else if (res['social']) {
                 response.writeHead(302, {"Location": res['redirect_url']});
                 response.end();
             }
-            else if (res.hasOwnProperty('social_token')) {
+            else if (res['social_token']) {
                 response.writeHead(302, {"Location": "/", "Set-Cookie": "token="+res['token']+"; path=/"});
                 response.end();
             }
@@ -67,24 +68,42 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
             }
         }
 
-        if (["post", "put"].indexOf(request.method.toLowerCase())>-1) {
+        if (["post", "put"].indexOf(method_type)>-1) {
             var form = new formidable.IncomingForm();
-                max_file_size = 100 * 1024 * 1024;
             form.uploadDir = upload_dir;
             IPC_pack = makeIpcPack(request);
 
             form.on('field', function(name, value) {
-                if (!IPC_pack["query_params"].hasOwnProperty(name)) {
-                            IPC_pack["query_params"][name] = value;
+                if (!IPC_pack["query_params"][name]) {
+                    IPC_pack["query_params"][name] = value;
                 };
             });
             form.on('fileBegin', function(name, file) { //для сохранения имени файла, вместо случайного хэша
-                console.log(IPC_pack);
-                if (IPC_pack.token) {
-                    var tokenized_dir = path.join(upload_dir, IPC_pack.token);
-                    fs.mkdir(tokenized_dir, function(error) {})                 //TODO: иногда валилось непонятно почему,
-                    IPC_pack.query_params.filename = IPC_pack.token+'/'+file.name;  //не успевало создать папку перед сохранением файла?
-                    file.path = path.join(tokenized_dir, file.name);
+                if (IPC_pack['token']) {
+                    var UINFO_pack = JSON.parse(JSON.stringify(IPC_pack));
+                    UINFO_pack['api_method'] = '/user/info';
+                    UINFO_pack['api_type'] = 'get';
+                    IPC_pack['query_params']['filename'] = file['name'];
+
+                    function uinfo_cbk(error, res, more) {
+                        if (error) {
+                            console.log(error);
+                        }
+                        else if (!res) {
+                            console.log('Invoke has not got response from avatar method');
+                        }
+                        else if (res['exception']) {
+                            var code = parseInt(res['exception']['code']);
+                            console.log(res['exception']['message']);
+                        }
+                        else {
+                            usered_dir = path.join(upload_dir, res['id'].toString());
+                            fs.mkdir(usered_dir, function(error) {});         //TODO: иногда валилось непонятно почему,
+                            file['path'] = path.join(usered_dir, file['name']);  //не успевало создать папку перед сохранением файла?
+                        }
+                    }
+
+                    backend_client.invoke("route", UINFO_pack, uinfo_cbk);
                 }
             });
             form.on('end', function() {
