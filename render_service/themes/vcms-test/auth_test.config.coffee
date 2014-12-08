@@ -1,4 +1,0 @@
-prepare = ($) ->
-  $
-
-module.exports = prepare

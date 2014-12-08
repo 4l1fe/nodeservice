@@ -1,4 +1,4 @@
-# log (output to console) messages
+ # log (output to console) messages
 @log_msg = (msg, type = "normal") ->
   # type =
   #   normal - normal messages (general)

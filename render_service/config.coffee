@@ -18,7 +18,7 @@ yaml = require 'js-yaml'
 @tpl_config_ext = ".config"
 
 # set theme params
-@theme_name = "show_online"
+@theme_name = "show_online_full"
 @theme_path = @themes_path + @theme_name + "/"
 @theme_global_config = @theme_path + ".config"
 
@@ -31,7 +31,9 @@ yaml = require 'js-yaml'
   smarttv: []
 
 # set urls
-@static_url = "static/"
+@content_url = "http://localhost:63342/vmcs_from_live/tmp/content/"
+@static_url = "http://localhost:63342/vmcs_from_live/tmp/static/"
+@cdn_url = "http://localhost:63342/vmcs_from_live/tmp/cdn/"
 @themes_url = @static_url + "themes/"
 @theme_url = @themes_url + @theme_name + "/"
 
@@ -42,12 +44,16 @@ yaml = require 'js-yaml'
   js: @theme_url + "js/"
   css: @theme_url + "css/"
   global:
+    content: @content_url
+    content_media: @content_url + "media/"
+    content_users: @content_url + "users/"
+    cdn: @cdn_url
     static: @static_url
     img: @static_url + "img/"
     js: @static_url + "js/"
     css: @static_url + "css/"
 
-
+###
 @server = yaml.safeLoad(fs.readFileSync path.join(@path, '..', 'configs', 'node_service.yaml'), 'utf8')
 
 # set app port and host
@@ -57,4 +63,12 @@ yaml = require 'js-yaml'
 # set backend(zeroprpc) port and host
 @backend_host = @server['render_serv']['backend']['host']
 @backend_port = @server['render_serv']['backend']['port']
+###
 @connection_string = 'tcp://' + @backend_host + ':' + @backend_port
+
+
+@backend_host = "127.0.0.1"
+@backend_port = 6600
+
+@app_host = "127.0.0.1"
+@app_port = 9901

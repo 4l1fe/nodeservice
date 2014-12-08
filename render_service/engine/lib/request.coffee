@@ -4,16 +4,6 @@
 ua_parser = require('ua-parser')
 url = require('url')
 
-parse_cookies: (req) ->
-  cookies = {}
-  r_c = req.headers.cookie;
-  r_c && r_c.split(';').forEach (cookie) ->
-    parts = cookie.split('=')
-    cookies[parts.shift().trim()] = decodeURI parts.join('=')
-
-  return cookies
-
-
 class Request
   # constructor with request and response params
   constructor: (@req, @res) ->
@@ -22,7 +12,6 @@ class Request
     @_query_info = undefined
     @_device_info = undefined
     @url_parsed = undefined
-    @cookies = parse_cookies @req
 
   # parsing current url, use url.parse
   parse_url: ->
@@ -93,18 +82,19 @@ class Request
 
   # check if user is authenticated
   user_is_auth: ->
-    return @cookies.hasOwnProperty 'token' or @cookies.hasOwnProperty 'x_token'
+    # TODO: not working
+    return @app.api.call '/internal/auth/check', 'get', {}, {}
 
   # return auth user if authenticated
-  auth_user: (callback)->
-    return @app.api.call '/user/info', 'get', {}, @cookies, callback
+  auth_user: ->
+    # TODO: not working
+    return false
+    #return @app.api.call '/internal/info/user', 'get', {}, {}
 
   # return session if set
   session: ->
-    tokens =
-      token: @cookies['token']
-      x_token: @cookies['x_token']
-    return tokens
+    # TODO: not working
+    return @app.api.call '/internal/info/session', 'get', {}, {}
 
   # output html with code to user and ends request
   response: (code, html = undefined) ->
@@ -120,5 +110,10 @@ class Request
   # output code with msg if defined
   response_code: (code, msg = undefined) ->
     @response code, msg
+
+  redirect: (url, code) ->
+    code = 302 if code == undefined
+    @res.writeHead code, {"Location": url}
+    @res.end()
 
 module.exports = Request

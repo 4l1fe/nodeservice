@@ -94,6 +94,7 @@
       this.name = name;
       this.req = req;
       this.route = route;
+      this.fail_status = void 0;
       if (templates[this.name] && templates[this.name].is_broken) {
         this.req.response_code(500);
       } else {
@@ -149,17 +150,30 @@
     };
 
     Template.prototype._compile = function() {
-      try {
-        return this.req.response_html(jade.renderFile(this.req.app.conf.theme_path + this.name + this.req.app.conf.jade_ext, this.params()));
-      } catch (_error) {
-        e = _error;
-        this.req.response_code(500);
-        this.req.app.log_msg('Failed to compile template "' + this.name + '". Error message: ' + e.toString(), "warn");
-        if (templates[this.name] === void 0) {
-          templates[this.name] = {};
+      var code;
+      if (this.fail_status !== void 0) {
+        if (this.fail_status.url) {
+          return this.req.redirect(this.fail_status.url, this.fail_status.code);
+        } else {
+          code = this.fail_status.code;
+          if (this.fail_status.code === void 0) {
+            code = 500;
+          }
+          return this.req.response_code(code);
         }
-        templates[this.name].is_broken = true;
-        return this.req.app.log_msg('Template "' + this.name + '" marked as "broken"', "warn");
+      } else {
+        try {
+          return this.req.response_html(jade.renderFile(this.req.app.conf.theme_path + this.name + this.req.app.conf.jade_ext, this.params()));
+        } catch (_error) {
+          e = _error;
+          this.req.response_code(500);
+          this.req.app.log_msg('Failed to compile template "' + this.name + '". Error message: ' + e.toString(), "warn");
+          if (templates[this.name] === void 0) {
+            templates[this.name] = {};
+          }
+          templates[this.name].is_broken = true;
+          return this.req.app.log_msg('Template "' + this.name + '" marked as "broken"', "warn");
+        }
       }
     };
 
@@ -200,42 +214,48 @@
       return this._api(arguments);
     };
 
-    Template.prototype.api_cache = function(param_name, expire) {
-      var args, val;
+    Template.prototype.api_cache = function(param_name, expire, method) {
+      var i, val, _args;
       val = this.cache(param_name);
       if (val === void 0) {
-        args = arguments.splice(2);
-        return args.splice(1, 0, (function(_this) {
-          return function(code, params) {
-            if (code === _this.req.app.api.STATUS_OK) {
-              _this.params(param_name, params.data);
-              return _this.cache(param_name, params.data, expire);
-            }
-          };
-        })(this));
+        i = 3;
+        _args = [
+          method, (function(_this) {
+            return function(code, params) {
+              if (code === _this.req.app.api.STATUS_OK) {
+                _this.params(param_name, params.data);
+                return _this.cache(param_name, params.data, expire);
+              }
+            };
+          })(this)
+        ];
+        while (i < arguments.length) {
+          _args.push(arguments[i]);
+          i++;
+        }
+        return this._api(_args);
       } else {
-        return val;
+        return this.params(param_name, val);
       }
     };
 
     Template.prototype.api_get = function() {
-      arguments.splice(1, 0, "get");
-      return this._api(arguments);
+      var args;
+      args = [].splice.call(arguments, 0);
+      args.splice(2, 0, "get");
+      return this._api(args);
     };
 
     Template.prototype.api_post = function() {
-      arguments.splice(1, 0, "post");
-      return this._api(arguments);
+      return this._api(Array.prototype.splice.call(arguments, 1, 0, "post"));
     };
 
     Template.prototype.api_put = function() {
-      arguments.splice(1, 0, "put");
-      return this._api(arguments);
+      return this._api(Array.prototype.splice.call(arguments, 1, 0, "put"));
     };
 
     Template.prototype.api_delete = function() {
-      arguments.splice(1, 0, "delete");
-      return this._api(arguments);
+      return this._api(Array.prototype.splice.call(arguments, 1, 0, "delete"));
     };
 
     Template.prototype.query_info = function(name) {
@@ -254,8 +274,8 @@
       return this.req.user_is_auth();
     };
 
-    Template.prototype.auth_user = function(callback) {
-      return this.req.auth_user(callback);
+    Template.prototype.auth_user = function() {
+      return this.req.auth_user();
     };
 
     Template.prototype.session = function() {
@@ -319,10 +339,17 @@
       return app.cache.clear(name);
     };
 
+    Template.prototype.set_fail = function(code) {
+      return this.fail_status = {
+        code: code || 500
+      };
+    };
+
     Template.prototype.redirect = function(url, status) {
       if (status == null) {
         status = 200;
       }
+      return this.req.redirect(url, status);
     };
 
     return Template;
@@ -332,3 +359,5 @@
   module.exports = Template;
 
 }).call(this);
+
+//# sourceMappingURL=template.js.map

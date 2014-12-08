@@ -1,0 +1,79 @@
+doctype html
+html
+    include config
+    include ../show_online/mixins
+    include head
+    body
+        include ../show_online/header
+        .page-show-left-splash
+            img(src=page_conf.left_splash_img)
+        .page-show-right-splash
+            img(src=page_conf.right_splash_img)
+        .page-show-top-splash
+            img(src=page_conf.top_splash_img)
+        .page-show-top-shadow &nbsp;
+        .shadow-container-wrapper.page-show
+            .shadow-container
+                section.cast-def-block
+                    .container
+                        .row
+                            .col-lg-3.col-md-4.cast-poster-area
+                                .cast-big-poster
+                                    if cast_def.poster && cast_def.poster.length
+                                        img(src=cast_def.poster)
+                            .col-lg-7.col-md-5.cast-def-area
+                                h3=cast_def.title
+                                .cast-attrs-list
+                                    .cast-attr
+                                        span.attr-name Год выпуска:
+                                        - release_date = new Date(cast_def.release_date);
+                                        span.attr-val=release_date.getFullYear()
+                                    .cast-attr
+                                        span.attr-name Страна:
+                                        span.attr-val=cast_def.country
+                                    .cast-attr
+                                        span.attr-name Жанр:
+                                        span.attr-val=cast_def.genre
+                                    .cast-attr
+                                        span.attr-name Возрастное ограничение:
+                                        span.attr-val.pg-rating=cast_def.pg_rating
+
+                                .cast-subscribe-btn.btn.btn-success Подписаться
+
+                                .cast-rating-def
+                                    i=cast_def.rating
+                                    em="(" + cast_def.votes_count + ")"
+
+                                .rating-stars-area
+                                    span Ваша оценка:
+                                    span.rating-stars-list
+                                        - rating_floor = Math.floor( cast_def.rating )
+                                        - rating_fract = cast_def.rating - rating_floor
+                                        - for( var i = 1; i <= 10; i++ ) {
+                                            - star_class = ""
+                                            if i < cast_def.rating
+                                                - star_class = "is-active"
+                                            else if rating_floor+1 == i
+                                                if rating_fract > 0.5
+                                                    - star_class = "is-half"
+
+                                            span.sprite.sprite-i-rating-star(class=star_class) &nbsp;
+                                        - }
+                                h4 Сюжет
+                                .cast-description=cast_def.description
+                            .col-lg-2.col-md-3.visible-lg-block.visible-md-block.see-also-area
+                                h3 Смотри также
+                                .see-also-poster
+                                    img(src="")
+
+
+                section.casts-list
+                    .container
+                        mixin casts_list(casts)
+
+                section.serial-news-block
+                    .container
+                        h3 Новости сериала
+                        mixin casts_news_block(news_list)
+
+                include footer

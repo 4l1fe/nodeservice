@@ -74,6 +74,7 @@ class Template
     # name - name of template
     # req - request instance
     # route - route object
+    @fail_status = undefined
     if templates[@name] && templates[@name].is_broken
       # return 500 if template marked as broken
       @req.response_code(500)
@@ -116,15 +117,23 @@ class Template
 
   _compile: () ->
     # try to render template
-    try
-      @req.response_html jade.renderFile(@req.app.conf.theme_path + @name + @req.app.conf.jade_ext, @params())
-    catch e
-      # return 500 if fail
-      @req.response_code 500
-      @req.app.log_msg 'Failed to compile template "' + @name + '". Error message: ' + e.toString(), "warn"
-      templates[@name] = {} if templates[@name] == undefined
-      templates[@name].is_broken = true
-      @req.app.log_msg 'Template "' + @name + '" marked as "broken"', "warn"
+    if @fail_status != undefined
+      if @fail_status.url
+        @req.redirect(@fail_status.url, @fail_status.code)
+      else
+        code = @fail_status.code
+        code = 500 if @fail_status.code == undefined
+        @req.response_code(code)
+    else
+      try
+        @req.response_html jade.renderFile(@req.app.conf.theme_path + @name + @req.app.conf.jade_ext, @params())
+      catch e
+        # return 500 if fail
+        @req.response_code 500
+        @req.app.log_msg 'Failed to compile template "' + @name + '". Error message: ' + e.toString(), "warn"
+        templates[@name] = {} if templates[@name] == undefined
+        templates[@name].is_broken = true
+        @req.app.log_msg 'Template "' + @name + '" marked as "broken"', "warn"
 
   _fail: () ->
     @req.app.log_msg 'Unable to proceed template "' + @name + '" for session ' + @session().id
@@ -149,7 +158,6 @@ class Template
       args.callback = (code, params) =>
         if code == @req.app.api.STATUS_OK
           @.params(args.param_name, params.data)
-
     @req.app.api.call args.method, args.method_type, args.args, args.params, @stack.push(args.callback, ["data"])
 
   api: () ->
@@ -157,41 +165,47 @@ class Template
     # call api with arguments
     @_api arguments
 
-  api_cache: (param_name, expire) ->
+  api_cache: (param_name, expire, method) ->
     # param_name, expire, method[, method_type] [, args] [, params]
     val = @cache(param_name)
     if val == undefined
-      args = arguments.splice(2)
-      args.splice 1, 0, (code, params) =>
-        if code == @req.app.api.STATUS_OK
-          @.params(param_name, params.data)
-          @.cache(param_name, params.data, expire)
+      i = 3
+      _args = [
+        method,
+        (code, params) =>
+          if code == @req.app.api.STATUS_OK
+            @.params(param_name, params.data)
+            @.cache(param_name, params.data, expire)
+      ]
+      while i < arguments.length
+        _args.push(arguments[i])
+        i++
+      @_api(_args)
     else
-      return val
+      @.params(param_name, val)
 
   api_get: () ->
     # method, param_name/callback [, args] [, params]
     # call api with arguments and method_type = get
-    arguments.splice(1, 0, "get")
-    @_api arguments
+    #arguments.splice(1, 0, "get")
+    args = [].splice.call(arguments,0)
+    args.splice(2,0,"get")
+    @_api args
 
   api_post: () ->
     # method, param_name/callback [, args] [, params]
     # call api with arguments and method_type = post
-    arguments.splice(1, 0, "post")
-    @_api arguments
+    @_api Array.prototype.splice.call(arguments, 1, 0, "post")
 
   api_put: () ->
     # method, param_name/callback [, args] [, params]
     # call api with arguments and method_type = put
-    arguments.splice(1, 0, "put")
-    @_api arguments
+    @_api Array.prototype.splice.call(arguments, 1, 0, "put")
 
   api_delete: () ->
     # method, param_name/callback [, args] [, params]
     # call api with arguments and method_type = delete
-    arguments.splice(1, 0, "delete")
-    @_api arguments
+    @_api Array.prototype.splice.call(arguments, 1, 0, "delete")
 
   query_info: (name) ->
     @req.query_info name
@@ -205,8 +219,8 @@ class Template
   user_is_auth: ->
     @req.user_is_auth()
 
-  auth_user: (callback) ->
-    @req.auth_user callback
+  auth_user: ->
+    @req.auth_user()
 
   session: ->
     @req.session()
@@ -244,7 +258,10 @@ class Template
   cache_remove: (name) ->
     app.cache.clear(name)
 
-  redirect: (url, status = 200) ->
+  set_fail: (code) ->
+    @fail_status = {code: code || 500}
 
+  redirect: (url, status = 200) ->
+    @req.redirect(url, status)
 
 module.exports = Template

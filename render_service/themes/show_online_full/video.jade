@@ -1,0 +1,115 @@
+doctype html
+html
+   include config
+   - title = media.title
+   - title_href = "/" + topic.name
+   if !title
+      - title = unit.title
+      if unit.morder
+         - title+= ", " + unit.morder + " серия"
+   - page_title = title
+   - head_scripts = [res.js + "lib/vast-client.js", res.js + "lib/videojs.ads.js", res.js + "videojs.vast.js"]
+   include mixins
+   include head
+   body.page-video
+      - bg_image = 'background-image: url("' + topics_bg[topic.name] + '")'
+      include header
+      .topic-wrapper(style=bg_image, class="has_topic_wrapper")
+         .shadow-container
+            section.info-block
+               .container
+                  .col-lg-10.col-md-12.col-no-padding
+                     .subscribe
+                        button.btn.btn-success Подписаться
+                     h1
+                        a(href=topic_href)=topic.title
+                        | #{" " + title}
+                     .video-container
+                        - poster = res.global.content_media + media.id + "/poster"
+                        video(id="video" class="video-js vjs-default-skin vjs-dark-acid-skin" controls="" preload="none", data-setup="{}", poster=poster)
+                           source(src=media.locations[0].value type='video/mp4')
+                     .video-ctrls
+                        .col-md-7.col-no-padding.col-sm-12
+                           .col-md-8.col-no-padding.col-xs-8
+                              button.btn-playlist.btn-transparent
+                                span в&nbsp;плейлист
+                              button.btn-invite.btn-transparent
+                                 span пригласить
+                           .col-md-4.col-no-padding.col-xs-4
+                              .rating-block
+                                 .col-md-8.col-no-padding.col-xs-8
+                                    .rateit(data-rateit-max=10,data-rateit-step=1,data-rateit-resetable=1,data-rateit-value=0)#rateit
+                                 if media.rating
+                                    .col-md-4.rating-total.col-no-padding.col-xs-4
+                                       |#{media.rating}
+                                       span #{" (" + media.rating_votes + ")"}
+                        .col-md-5.col-no-padding.col-sm-12
+                           .col-md-8.col-no-padding.col-xs-8
+                              .share-block
+                                    script(src="http://yandex.st/share/share.js", charset="utf-8")
+                                    .yashare-auto-init(data-yasharetype="big", data-yashareL10n="ru", data-yashareQuickServices="odnoklassniki,vkontakte,gplus,facebook,twitter,moimir", data-yashareTheme="counter")
+                           if media.views_cnt
+                              .col-md-4.video_stat.col-no-padding.col-xs-4
+                                 b=media.views_cnt
+                                 | Просмотров
+                     if mediaunits && mediaunits.length
+                        .clearfix
+                        .units-btns(data-mi-pid="mediaunits_btns")
+                           for item in mediaunits
+                              .unit-btn
+                                 - tmp_url = "/unit/" + item.id
+                                 if item.topic
+                                    - tmp_url = item.topic.name + tmp_url
+                                 - cls = ""
+                                 if item.id == mediaunit.id
+                                    - cls = "active"
+                                 a(href=tmp_url, data-mi-val=item.id, class=cls)=item.title
+                        .units-media-wrapper.modern-scrollbar(data-mi-pid="units_media")
+                           for item in mediaunits
+                              - tmp = "media_unit_" + item.id
+                              .media-list(data-mi-pid=tmp)
+                                 if item.media
+                                    for m in item.media
+                                       .cast-thumb
+                                          mixin film_thumb(m)
+                  if films_popular && films_popular.length
+                    .col-lg-2.col-no-padding.col-md-12.films-popular.modern-scrollbar
+                       h2 популярные
+                       .films-popular-wrapper
+                          for item in films_popular
+                              .cast-thumb
+                                 mixin film_thumb(item)
+            section.news-block
+               .container
+                  .col-md-9.col-xs-12
+                     h2.comment-h2 Комментарии
+                     .comment.form-comment
+                        if auth_user
+                           .avatar
+                              - user_avatar = content_users + auth_user.id + "/avatar"
+                              img(src=user_avatar)
+                           .comment-info
+                              form#comment_form
+                                 .form-group
+                                    textarea(name="text")
+                                 .form-group.submit-button
+                                    button(type="submit").btn.btn-default Отправить
+                        else
+                           p Чтобы оставить комментарий к этому видео, надо <a href="/register" class="login-url">зарегистрироваться</a> или <a href="/login" class="register-url">войти</a>.
+                     #comments
+                        if comments
+                           for item in comments
+                              mixin comment_thumb(item)
+                  if news && news.length
+                     .col-md-3.news-list.col-xs-12
+                        h2 Свежие новости
+                        for item in news
+                           mixin news_thumb(item)
+      include footer
+      - conf = {}
+      - conf.media = media
+      - conf.unit = unit
+      script.
+         $(document).ready(function () {
+            window.InitApp({page_conf: !{JSON.stringify(conf)}}, "Video")
+         })

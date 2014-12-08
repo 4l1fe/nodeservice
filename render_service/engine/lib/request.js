@@ -7,20 +7,6 @@
 
   url = require('url');
 
-  ({
-    parse_cookies: function(req) {
-      var cookies, r_c;
-      cookies = {};
-      r_c = req.headers.cookie;
-      r_c && r_c.split(';').forEach(function(cookie) {
-        var parts;
-        parts = cookie.split('=');
-        return cookies[parts.shift().trim()] = decodeURI(parts.join('='));
-      });
-      return cookies;
-    }
-  });
-
   Request = (function() {
     function Request(req, res) {
       this.req = req;
@@ -30,7 +16,6 @@
       this._query_info = void 0;
       this._device_info = void 0;
       this.url_parsed = void 0;
-      this.cookies = parse_cookies(this.req);
     }
 
     Request.prototype.parse_url = function() {
@@ -111,20 +96,15 @@
     };
 
     Request.prototype.user_is_auth = function() {
-      return this.cookies.hasOwnProperty('token' || this.cookies.hasOwnProperty('x_token'));
+      return this.app.api.call('/internal/auth/check', 'get', {}, {});
     };
 
-    Request.prototype.auth_user = function(callback) {
-      return this.app.api.call('/user/info', 'get', {}, this.cookies, callback);
+    Request.prototype.auth_user = function() {
+      return false;
     };
 
     Request.prototype.session = function() {
-      var tokens;
-      tokens = {
-        token: this.cookies['token'],
-        x_token: this.cookies['x_token']
-      };
-      return tokens;
+      return this.app.api.call('/internal/info/session', 'get', {}, {});
     };
 
     Request.prototype.response = function(code, html) {
@@ -151,6 +131,16 @@
       return this.response(code, msg);
     };
 
+    Request.prototype.redirect = function(url, code) {
+      if (code === void 0) {
+        code = 302;
+      }
+      this.res.writeHead(code, {
+        "Location": url
+      });
+      return this.res.end();
+    };
+
     return Request;
 
   })();
@@ -158,3 +148,5 @@
   module.exports = Request;
 
 }).call(this);
+
+//# sourceMappingURL=request.js.map

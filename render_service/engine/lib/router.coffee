@@ -170,7 +170,7 @@ class Router
         tpl = route.param
         if route.args
           for own key, arg of route.args
-            tpl = tpl.replace("{" + key + "}", arg)
+            tpl = tpl.replace(":" + key, arg)
         if route.matches
           for match, i in route.matches
             tpl = tpl.replace("$" + i, match)

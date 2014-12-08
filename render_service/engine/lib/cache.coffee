@@ -9,9 +9,8 @@ class Cache
     setInterval(@_maintain.bind(@), 1000)
 
   get: (name) ->
-    console.log "get: " + name
     el = @cached[name]
-    return el.val if el != undefined
+    return JSON.parse( JSON.stringify( el.val ) ) if el != undefined
     return undefined
 
   in_cache: (name) ->
@@ -19,7 +18,7 @@ class Cache
     true
 
   put: (name, value, expired = undefined) ->
-    @cached[name] = {val: value}
+    @cached[name] = {val: JSON.parse( JSON.stringify( value ) )}
     if expired != undefined
       dt = new Date()
       dt.setSeconds(dt.getSeconds() + expired)

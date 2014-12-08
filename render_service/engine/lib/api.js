@@ -51,3 +51,5 @@
   module.exports = Api;
 
 }).call(this);
+
+//# sourceMappingURL=api.js.map

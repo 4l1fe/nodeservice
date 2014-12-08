@@ -1,0 +1,25 @@
+head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    //-if (meta)
+    //-    each item in meta
+    //-        |!{"<meta " + item + "/>"}
+    - head_title = page_title_full?page_title_full:(page_title?page_title + " &mdash; ":"") + "Шоу онлайн &mdash; сериалы и шоу онлайн"
+    title!=head_title
+    //-meta_keywords = page_keywords || "смотри смотреть онлайн бесплатно фильмы без регистрации скачать фильм фильмы бесплатные кино новинки 2014 в хорошем качестве сериалы серии сериал сезон спортивные трансляции просмотр ТВ футбол"
+    //-meta_descr = page_description || "У нас на сайте вы можете найти новинки фильмов в хорошем качестве или HD быстро и без регистрации. Фильмы в HD качестве и DVDRip. Каждый день новые добавления. У нас можно найти что посмотреть сегодня вечером и получить уведомления о появлении новых серий и фильмов в интернет. Больше не нужно ждать когда появится фильм онлайн, можно подписаться на уведомление о выходе."
+    //-meta(name="keywords",content=meta_keywords)
+    //-meta(name="description",content=meta_descr)
+    link(href=res.css + 'bootstrap.min.css', rel='stylesheet')
+    link(href=res.css + 'bootstrap-theme.css', rel='stylesheet')
+    link(href=res.css + 'custom.css', rel='stylesheet')
+    link(href=res.css + 'bootstrap-notify.css', rel='stylesheet')
+    link(href=res.css + 'rateit.css', rel='stylesheet')
+    link(href=res.css + "video-js.css" rel="stylesheet" type="text/css")
+    link(href=res.css + "player.css" rel="stylesheet" type="text/css")
+    link(href=res.css + "vast.plugin.css" rel="stylesheet" type="text/css")
+    link(rel="icon",type="image/ico",href="/favicon.ico")
+    //if head_link
+    //-    each item in head_link
+    //-       ="<link " + item + "/>"
