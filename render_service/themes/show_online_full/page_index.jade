@@ -154,6 +154,7 @@ html
                                                 b комментариев
                                                 em более
                                             .stat-number!=format_stat_number(stat.comments_count)
+                include footer
             #fb-root
             script.
                 (function(d, s, id) {
@@ -166,6 +167,5 @@ html
             script(src="//vk.com/js/api/openapi.js?116")
             script.
                 VK.Widgets.Group("vk_groups", {mode: 0, width: "300px", color1: 'FFFFFF', color2: '2B587A', color3: '5B7FA6'}, 82007356);
-                include footer
             script.
                 $(document).ready(function () {window.InitApp({page_conf: {}}, "Main")})

@@ -42,11 +42,11 @@
     smarttv: []
   };
 
-  this.content_url = "http://localhost:63342/vmcs_from_live/tmp/content/";
+  this.content_url = "http://cdn.serialov.tv/content/";
 
-  this.static_url = "http://localhost:63342/vmcs_from_live/tmp/static/";
+  this.static_url = "http://cdn.serialov.tv/s/";
 
-  this.cdn_url = "http://localhost:63342/vmcs_from_live/tmp/cdn/";
+  this.cdn_url = "http://cdn.serialov.tv/";
 
   this.themes_url = this.static_url + "themes/";
 
@@ -69,28 +69,17 @@
     }
   };
 
+  this.server = yaml.safeLoad(fs.readFileSync(path.join(this.path, '..', 'configs', 'node_service.yaml'), 'utf8'));
 
-  /*
-  @server = yaml.safeLoad(fs.readFileSync path.join(@path, '..', 'configs', 'node_service.yaml'), 'utf8')
-  
-   * set app port and host
-  @app_port = @server['render_serv']['port']
-  @app_host = @server['render_serv']['host']
-  
-   * set backend(zeroprpc) port and host
-  @backend_host = @server['render_serv']['backend']['host']
-  @backend_port = @server['render_serv']['backend']['port']
-   */
+  this.app_port = this.server['render_serv']['port'];
+
+  this.app_host = this.server['render_serv']['host'];
+
+  this.backend_host = this.server['render_serv']['backend']['host'];
+
+  this.backend_port = this.server['render_serv']['backend']['port'];
 
   this.connection_string = 'tcp://' + this.backend_host + ':' + this.backend_port;
-
-  this.backend_host = "127.0.0.1";
-
-  this.backend_port = 6600;
-
-  this.app_host = "127.0.0.1";
-
-  this.app_port = 9901;
 
 }).call(this);
 

@@ -31,9 +31,9 @@ yaml = require 'js-yaml'
   smarttv: []
 
 # set urls
-@content_url = "http://localhost:63342/vmcs_from_live/tmp/content/"
-@static_url = "http://localhost:63342/vmcs_from_live/tmp/static/"
-@cdn_url = "http://localhost:63342/vmcs_from_live/tmp/cdn/"
+@content_url = "http://cdn.serialov.tv/content/"
+@static_url = "http://cdn.serialov.tv/s/"
+@cdn_url = "http://cdn.serialov.tv/"
 @themes_url = @static_url + "themes/"
 @theme_url = @themes_url + @theme_name + "/"
 
@@ -53,7 +53,7 @@ yaml = require 'js-yaml'
     js: @static_url + "js/"
     css: @static_url + "css/"
 
-###
+
 @server = yaml.safeLoad(fs.readFileSync path.join(@path, '..', 'configs', 'node_service.yaml'), 'utf8')
 
 # set app port and host
@@ -63,12 +63,5 @@ yaml = require 'js-yaml'
 # set backend(zeroprpc) port and host
 @backend_host = @server['render_serv']['backend']['host']
 @backend_port = @server['render_serv']['backend']['port']
-###
+
 @connection_string = 'tcp://' + @backend_host + ':' + @backend_port
-
-
-@backend_host = "127.0.0.1"
-@backend_port = 6600
-
-@app_host = "127.0.0.1"
-@app_port = 9901

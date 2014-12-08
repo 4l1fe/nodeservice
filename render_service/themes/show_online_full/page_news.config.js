@@ -17,8 +17,8 @@
       opts2.obj_type = opts1.obj_type = "topic";
       opts2.obj_name = opts2.obj_name = topic_name;
     }
-    $.api_cache("news", 1800, "news/list", opts1);
-    $.api_cache("other_news", 1800, "news/list", opts2);
+    $.api_cache("news", 1800, "/news/list", opts1);
+    $.api_cache("other_news", 1800, "/news/list", opts2);
     return $.params("topic_name", topic_name);
   };
 

@@ -1,7 +1,7 @@
 include config
 
-- months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"]
-- date_now = new Date()
+- months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+- date_now = new Date();
 
 - function format_stat_number(i) {
 -   if( i < 1000 ) {
@@ -32,21 +32,29 @@ include config
 - function duration_text(min) {
 -   var ho, mi, res, da;
 -   ho = Math.floor(min / 60); mi = min - ho*60;
--   da = Math.floor(ho / 24); ho = ho % 24
+-   da = Math.floor(ho / 24); ho = ho % 24;
 -   res = da?da + cardinal(da, " день", " дня", " дней"):"";
 -   res+= (res?" ":"") + (ho?ho + cardinal(ho, " час", " часа", " часов"):"");
--   if (mi) res+= (res?" ":"") + mi + cardinal(mi, " минута", " минуты", " минут")
+-   if (mi) res+= (res?" ":"") + mi + cardinal(mi, " минута", " минуты", " минут");
 -   return res || "0 минут";
+- }
+- function date_text(dt) {
+-   return dt.getDate() + " " + months[dt.getMonth()] + " " + dt.getFullYear() + " г.";
 - }
 - function date_text_str(str) {
 -   try {
--       return time_text(new Date(str));
+-       return date_text(new Date(str));
 -   } catch (e) {
 -       return str;
 -   }
 - }
-- function date_text(dt) {
--   return dt.getDate() + " " + months[dt.getMonth()] + " " + dt.getFullYear() + " г.";
+- function cardinal(val, form1, form2, form3) {
+-   var d10;
+-   if (val > 4 && val < 21) return form3;
+-   d10 = val % 10;
+-   if (d10 == 0 || d10 > 4) return form3;
+-   if (d10 == 1) return form1;
+-   return form2;
 - }
 - function utime_text_str(str) {
 -   try {
@@ -66,14 +74,7 @@ include config
 -       return "через " + text;
 -     } else {
 -       return text + " назад";
-- function cardinal(val, form1, form2, form3) {
--   var d10;
--   if (val > 4 && val < 21) return form3;
--   d10 = val % 10;
--   if (d10 == 0 || d10 > 4) return form3;
--   if (d10 == 1) return form1;
--   return form2;
-- }
+-     }
 -   }
 -   ho = Math.floor( Math.abs(diff) / 3600);
 -   if (ho <= 6) {
@@ -97,6 +98,7 @@ include config
 -   return dt.getDate() + " " + months[dt.getMonth()] + " " + dt.getFullYear();
 - }
 
+
 mixin cast_thumb(item)
     - topic = ""
     - href = "#"
@@ -116,7 +118,8 @@ mixin cast_thumb(item)
     a(href=href, title="", data-mi-athref="id")
         .lheight0.fsize0
             .rel.cast-poster-wrapper
-                img(src=res.global.content_media + item.id + "/poster", alt=film_name, title=film_name, data-mi-atsrc="id", data-mi-atalt="title", data-mi-attitle="title").cast-poster
+                -url=res.global.content_media + item.id + "/poster"
+                img(src=url, alt=film_name, title=film_name, data-mi-atsrc="id", data-mi-atalt="title", data-mi-attitle="title").cast-poster
                 .cast-play-btn.zmin
                     .play-triangle
             .rel.zmin
@@ -163,9 +166,10 @@ mixin news_thumb(news_item)
     .cast-news-def
         .cast-news-header
             if news_item.topic
-                a.cast-name(href="/" + news_item.topic.name)=news_item.topic.title
+                - url = "/"+news_item.topic.name
+                a.cast-name(href=url)=news_item.topic.title
             span.cast-date= ' / ' + utime_text_str(news_item.date)
-        .cast-news-title 
+        .cast-news-title
         //- if( news_item.comments_count != null ) {
         //    .cast-news-comments-count
         //        span.sprite.sprite-i-speech-bubble
@@ -224,6 +228,7 @@ mixin casts_news_block(news_list)
                                 a(href="")
                                     .sprite.sprite-i-news-archive
                                     span Архив новостей
+
 mixin comment_thumb(item)
     .comment
         - url = "/users/" + item.user.id
