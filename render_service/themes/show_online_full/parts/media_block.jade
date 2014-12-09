@@ -1,0 +1,23 @@
+.casts-list-inner
+   .tab-btn-group
+       .fright
+           a(href="#").tab-btn.nav-btn-back.btn_vid_left
+               .solid-arrow-left
+           a(href="#").tab-btn.tab-btn-active.nav-btn-forward.btn_vid_right
+               .solid-arrow-right
+       a(href="#").tab-btn.tab-btn-active.btn_vid_new Новое
+           .tab-arrow
+       a(href="#").tab-btn.btn_vid_popular Популярное
+           .tab-arrow
+   .rowvid_new
+       .vid-page
+           if media_new && media_new.length
+               each film in media_new
+                  .col-lg-2.col-md-3.col-sm-4.col-xs-4.cast-thumb
+                      mixin film_thumb(film)
+   .row.display-none.vid_popular
+       .vid-page
+           if media_pop && media_pop.length
+               each film in media_pop
+                  .col-lg-2.col-md-3.col-sm-4.col-xs-4.cast-thumb
+                      mixin film_thumb(film)

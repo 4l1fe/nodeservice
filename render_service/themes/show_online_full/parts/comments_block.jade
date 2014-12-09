@@ -1,0 +1,27 @@
+- cls = "col-md-9"
+if news_little && news_little.length
+   - cls = "col-md-9"
+   if !news_little_title
+      - news_little_title = "Свежие новости"
+div(class=cls)
+    h2.comment-h2 Комментарии
+    .comment.form-comment
+        if auth_user
+            .avatar
+                - user_avatar = content_users + auth_user.id + "/avatar"
+                img(src=user_avatar,alt=auth_user.name)
+            .comment-info
+                form.comment-form
+                    .form-group
+                        textarea(name="text")
+                    .form-group.submit-button
+                        button(type="submit").btn.btn-default Отправить
+        else
+            p Чтобы оставить комментарий здесь,надо <a href="/register" class="login-url">зарегистрироваться</a> или <a href="/login" class="register-url">войти</a>.
+    .comments-list
+        if comments
+            for item in comments
+               mixin comment_thumb(item)
+if news_little && news_little.length
+      .col-md-3
+         include news_little_block
