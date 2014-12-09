@@ -8,17 +8,17 @@
     var more_topic, topic;
     if (code === tpl.req.app.api.STATUS_OK) {
       topic = params.data;
-      tpl.api_get("media/list", "media_pop", {
+      tpl.api_get("media/list", "media_pop", {}, {
         limit: 12,
         topic: topic.name,
         sort: "views"
       });
-      tpl.api_get("media/list", "media_new", {
+      tpl.api_get("media/list", "media_new", {}, {
         limit: 12,
         topic: topic.name,
         sort: "date"
       });
-      tpl.api_get("news/list", "news", {
+      tpl.api_get("news/list", "news", {}, {
         limit: 10,
         obj_type: "topic",
         obj_name: topic.name
@@ -59,7 +59,7 @@
     } else {
       return $.api_get("topics/:topic/info", topic_success, {
         topic: url
-      }, {});
+      });
     }
   };
 

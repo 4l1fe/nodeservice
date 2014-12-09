@@ -13,7 +13,7 @@
       tpl.params("topic", topic);
       tpl.params("topic_name", topic_name);
       tpl.params("onenews", onenews);
-      return tpl.api_get("news/list", "news_little", {
+      return tpl.api_get("news/list", "news_little", {}, {
         limit: 5
       });
     } else {

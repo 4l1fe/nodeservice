@@ -3,15 +3,15 @@
   var prepare;
 
   prepare = function($) {
-    $.api_cache("media_new", 600, "media/list", {
+    $.api_cache("media_new", 600, "media/list", {}, {
       limit: 12,
       sort: "date"
     });
-    $.api_cache("media_pop", 600, "media/list", {
+    $.api_cache("media_pop", 600, "media/list", {}, {
       limit: 12,
       sort: "views"
     });
-    $.api_cache("news", 1800, "news/list", {
+    $.api_cache("news", 1800, "news/list", {}, {
       limit: 11,
       sort: "date"
     });

@@ -5,7 +5,7 @@ units_success = (code, params) ->
     units = params.data
     if units && units.length
       for u in units
-        tpl.api_get("media/list", "unit." + u.id, {limit: 12, units: u.id})
+        tpl.api_get("media/list", "unit." + u.id, {}, {limit: 12, units: u.id})
       tpl.params("params", tpl.params())
       tpl.params("units", units)
 
@@ -28,9 +28,9 @@ media_success = (code, params) ->
       tpl.params("media", params.data)
       tpl.params("unit", unit)
       tpl.params("topic", topic)
-      tpl.api_get("news/list", "news_little", {limit: 5})
-      tpl.api_get("mediaunits/list", units_success, {topic: topic.name}, {})
-      tpl.api_get("media/list", "films_popular", {topic: topic.name, sort: "views", limit: 4})
+      tpl.api_get("news/list", "news_little", {}, {limit: 5})
+      tpl.api_get("mediaunits/list", units_success, {}, {topic: topic.name})
+      tpl.api_get("media/list", "films_popular", {}, {topic: topic.name, sort: "views", limit: 4})
     else
       tpl.set_fail(404)
   else
@@ -42,6 +42,6 @@ prepare = ($) ->
   if args.id == undefined || !/d+/.test(args.id.test)
     $.set_fail(404)
   else
-    $.api_get("media/:id/info", media_success, {id: args.id}, {})
+    $.api_get("media/:id/info", media_success, {id: args.id})
 
 module.exports = prepare

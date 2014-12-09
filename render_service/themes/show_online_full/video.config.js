@@ -11,7 +11,7 @@
       if (units && units.length) {
         for (_i = 0, _len = units.length; _i < _len; _i++) {
           u = units[_i];
-          tpl.api_get("media/list", "unit." + u.id, {
+          tpl.api_get("media/list", "unit." + u.id, {}, {
             limit: 12,
             units: u.id
           });
@@ -48,13 +48,13 @@
         tpl.params("media", params.data);
         tpl.params("unit", unit);
         tpl.params("topic", topic);
-        tpl.api_get("news/list", "news_little", {
+        tpl.api_get("news/list", "news_little", {}, {
           limit: 5
         });
-        tpl.api_get("mediaunits/list", units_success, {
+        tpl.api_get("mediaunits/list", units_success, {}, {
           topic: topic.name
-        }, {});
-        return tpl.api_get("media/list", "films_popular", {
+        });
+        return tpl.api_get("media/list", "films_popular", {}, {
           topic: topic.name,
           sort: "views",
           limit: 4
@@ -76,7 +76,7 @@
     } else {
       return $.api_get("media/:id/info", media_success, {
         id: args.id
-      }, {});
+      });
     }
   };
 
