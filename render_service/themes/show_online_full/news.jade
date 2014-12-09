@@ -7,8 +7,8 @@ html
       include header
       - cls = ""
       - bg_image = ""
-      if topic && topic.name
-         - bg_image = 'background-image: url("' + topics_bg[topic.name] + '")'
+      if topic_name
+         - bg_image = 'background-image: url("' + topics_bg[topic_name] + '")'
       else
          - cls = "no-topic-wrapper"
       .topic-wrapper(style=bg_image, class=cls)
@@ -20,7 +20,7 @@ html
                         if onenews.img_url
                            img(src=onenews.img_url,align="right").onenews-img
                         .news-info
-                           =topic.title + " "
+                           //=topic.title + " "
                            span / #{utime_text_str(onenews.published)}
                         h2.onenews-title=onenews.title
                         .share-block

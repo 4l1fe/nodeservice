@@ -18,7 +18,7 @@
 
   app.router.add("/fizruk", "tpl", "show");
 
-  app.router.add("/Dom2", "tpl", "show");
+  app.router.add("/dom2", "tpl", "show");
 
   app.router.add("/news/:id", "tpl", "news");
 

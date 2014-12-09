@@ -10,20 +10,12 @@
       topic_name = tpl.args("topic");
       topic = void 0;
       onenews = params.data;
-      if (onenews.object) {
-        topic = onenews.object;
-        if (topic_name && topic_name !== topic.name) {
-          return tpl.set_fail(404);
-        } else {
-          tpl.params("topic", topic);
-          tpl.params("onenews", onenews);
-          return tpl.api_get("news/list", "news_little", {
-            limit: 5
-          });
-        }
-      } else {
-        return tpl.set_fail(404);
-      }
+      tpl.params("topic", topic);
+      tpl.params("topic_name", topic_name);
+      tpl.params("onenews", onenews);
+      return tpl.api_get("news/list", "news_little", {
+        limit: 5
+      });
     } else {
       return tpl.set_fail(404);
     }

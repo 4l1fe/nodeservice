@@ -83,7 +83,7 @@ mixin film_thumb(item)
     a(href=href, title="", data-mi-athref="id")
         .lheight0.fsize0
             .rel.cast-poster-wrapper
-                img(src=res.global.content_media + item.id + "/poster", alt=film_name, title=film_name, data-mi-atsrc="id", data-mi-atalt="title", data-mi-attitle="title").cast-poster
+                img(src=res.global.content_media + item.id + "/poster_200x200", alt=film_name, title=film_name, data-mi-atsrc="id", data-mi-atalt="title", data-mi-attitle="title").cast-poster
                 .cast-play-btn.zmin
                     .play-triangle
             .rel.zmin
@@ -109,7 +109,7 @@ mixin user_thumb_rating(item, index, is_star)
                     else
                         =(index + 1) + " "
                             i &mdash;
-                - tmp_url = res.global.content_users + item.id + "/avatar"
+                - tmp_url = res.global.content_users + item.id + "/avatar_100x100"
                 img(src=tmp_url, alt="", title="").person-img
             .person-def
                 - user_url = '/users/' + item.id
@@ -143,7 +143,7 @@ mixin comment_thumb(item)
     .comment
         - url = "/users/" + item.user.id
         .avatar
-            - tmp_img_url = res.global.content_users + item.user.id + "/avatar"
+            - tmp_img_url = res.global.content_users + item.user.id + "/avatar_100x100"
             img(src=tmp_img_url, alt=item.user.name, data-mi-atsrc="id", data-mi-atalt="user.name")
         .comment-info
             .comment-header

@@ -36,7 +36,7 @@
       if (topic.name === "fizruk") {
         more_topic = {
           title: "Дом 2",
-          name: "Dom2"
+          name: "dom2"
         };
       } else {
         more_topic = {
@@ -54,7 +54,7 @@
     var url;
     tpl = $;
     url = $.req.query_info("url").substr(1);
-    if (url !== "fizruk" && url !== "Dom2") {
+    if (url !== "fizruk" && url !== "dom2") {
       return $.set_fail(404);
     } else {
       return $.api_get("topics/:topic/info", topic_success, {

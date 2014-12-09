@@ -16,7 +16,7 @@ topic_success = (code, params) ->
     topic.rating = 8
     tpl.params("topic", topic)
     if topic.name == "fizruk"
-      more_topic = {title: "Дом 2", name: "Dom2"}
+      more_topic = {title: "Дом 2", name: "dom2"}
     else
       more_topic = {title: "Физрук", name: "fizruk"}
     tpl.params("more_topic", more_topic)
@@ -26,7 +26,7 @@ topic_success = (code, params) ->
 prepare = ($) ->
   tpl = $
   url = $.req.query_info("url").substr(1)
-  if url != "fizruk" && url != "Dom2"
+  if url != "fizruk" && url != "dom2"
     $.set_fail(404)
   else
     $.api_get("topics/:topic/info", topic_success, {topic: url}, {})
