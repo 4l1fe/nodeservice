@@ -32,6 +32,7 @@ class Api
         method = method.replace(":" + key, val)
 
     method = "/" + method if method.substr(0,1) != "/"
+
     ipc_pack = app.makeIpcPack(method, method_type, params, params.token, params.x_token, params.meta)
     @client.connect app.config.connection_string
     @client.invoke 'route', ipc_pack, (err, res, more) ->
