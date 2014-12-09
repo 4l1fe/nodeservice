@@ -1,5 +1,14 @@
 tpl = undefined
 
+units_success = (code, params) ->
+  if code == tpl.req.app.api.STATUS_OK
+    units = params.data
+    if units && units.length
+      for u in units
+        tpl.api_get("media/list", "unit." + u.id, {limit: 12, units: u.id})
+      tpl.params("params", tpl.params())
+      tpl.params("units", units)
+
 media_success = (code, params) ->
   if code == tpl.req.app.api.STATUS_OK
     topic_name = tpl.args("topic")
@@ -19,7 +28,9 @@ media_success = (code, params) ->
       tpl.params("media", params.data)
       tpl.params("unit", unit)
       tpl.params("topic", topic)
-      tpl.api_get("news/list", "news", {limit: 5})
+      tpl.api_get("news/list", "news_little", {limit: 5})
+      tpl.api_get("mediaunits/list", units_success, {topic: topic.name}, {})
+      tpl.api_get("media/list", "films_popular", {topic: topic.name, sort: "views", limit: 4})
     else
       tpl.set_fail(404)
   else

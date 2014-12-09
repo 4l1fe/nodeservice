@@ -3,6 +3,7 @@ html
     include config
     include mixins
     include head
+    - console.log('noavatar_url: ', noavatar_url)
     body
         include header
         .shadow-container-wrapper.is-header-pushed.page-messages.height100rel
@@ -27,6 +28,7 @@ html
                                                         - if( user.avatar != null && user.avatar.length ) {
                                                             - avatar_url = user.avatar
                                                         - }
+                                                        - console.log(avatar_url)
                                                         img(src=avatar_url, alt="", title="")
                                                     .user-name=user.name
                                                     .clearboth
@@ -47,6 +49,7 @@ html
                                                         - if( msg_item.user.avatar != null && msg_item.user.avatar.length ) {
                                                             - avatar_url = msg_item.user.avatar
                                                         - }
+                                                        - console.log(avatar_url)
                                                         img(src=avatar_url, alt="", title="")
                                                     .msg-item-def
                                                         - user_url = "/users/" + msg_item.user.id
@@ -75,4 +78,4 @@ html
                                         if recomended_casts && recomended_casts.length
                                             each item in recomended_casts
                                                 .cast-thumb
-                                                    mixin cast_thumb(item)
+                                                    mixin film_thumb(item)

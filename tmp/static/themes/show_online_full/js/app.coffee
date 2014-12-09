@@ -229,6 +229,113 @@ class FilmThumb extends Item
       vals["title"] = vals["topic"] + ": " + vals["title"]
     super
 
+class MediaBlock
+  current_vid = "new"
+  vid_opts =
+    popular: {cur_page: 0, pages_num: 1, limit: false, loading: false}
+    new: {cur_page: 0, pages_num: 1, limit: false, loading: false}
+
+  constructor: (@parent, @param_opts = {}) ->
+    @app = window.mi_app
+    @e =
+      btn_vid_popular: $(".btn_vid_popular", @parent)
+      btn_vid_new: $(".btn_vid_new", @parent)
+      btn_vid_left: $(".btn_vid_left", @parent)
+      btn_vid_right: $(".btn_vid_right", @parent)
+      vid_new: $(".vid_new", @parent)
+      vid_popular: $(".vid_popular", @parent)
+
+    @e["btn_vid_popular"].click(
+      (e) => e.preventDefault(); @switch_vid("popular")
+    )
+    @e["btn_vid_new"].click(
+      (e) => e.preventDefault(); @switch_vid("new")
+    )
+    @e["btn_vid_left"].click(
+      (e) => e.preventDefault(); @change_vid_page("left")
+    )
+    @e["btn_vid_right"].click(
+      (e) => e.preventDefault(); @change_vid_page("right")
+    )
+    @app.get_tpl("film-thumb")
+
+  switch_vid: (type) ->
+    return if type == current_vid
+    @e["vid_" + current_vid].hide(); @e["vid_" + type].show()
+    @e["btn_vid_" + current_vid].removeClass("tab-btn-active"); @e["btn_vid_" + type].addClass("tab-btn-active");
+    current_vid = type
+    @refresh_vid_page_btn()
+
+  change_vid_page: (dir) ->
+    op = vid_opts[current_vid]
+    if dir == "right"
+      if op.cur_page < (op.pages_num - 1)
+        @move_to_vid_page(current_vid, op.cur_page + 1)
+      else
+        return if op.limit || op.loading
+        op.loading = true
+        place = $('<div class="vid-page vid-page-loading"></div>')
+        op.pages_num++
+        @e["vid_" + current_vid].append(place).width((op.pages_num * 100) + "%")
+        $(".vid-page", @e["vid_" + current_vid]).width((100 / op.pages_num) + "%")
+        @move_to_vid_page(current_vid, op.pages_num - 1)
+        if current_vid == "new"
+          order = "date"
+        else
+          order = "votes"
+        param = $.extend({}, @param_opts)
+        param.order = order
+        param.limit = "12," + 12 * (op.pages_num - 1)
+        @app.rest.read("media/list",
+          {
+            data: param,
+            always: (success, data) =>
+              if success
+                if data && data.length
+                  for item in data
+                    new FilmThumb({parent: place, vals: item})
+                  place.removeClass("vid-page-loading")
+                  # place.text(data.toString())
+                  op.limit = true if data.length < 12
+                else
+                  op.pages_num--
+                  @move_to_vid_page(current_vid, op.pages_num - 1)
+                  place.remove()
+                  op.limit = true
+                op.loading = false
+              else
+                op.pages_num--
+                @move_to_vid_page(current_vid, op.pages_num - 1)
+                place.remove()
+                op.loading = false
+                op.limit = true
+          #@app.notify("Can't load data")
+          }
+        )
+    else
+      @move_to_vid_page current_vid, op.cur_page - 1
+
+  move_to_vid_page: (type, page) ->
+    op = vid_opts[type]
+    return if op.cur_page == page
+    return if page < 0 || ((op.loading || op.limit) && page >= op.pages_num)
+    e = @e["vid_" + type]
+    e.stop().animate({"margin-left": (- page * 100) + "%"})
+    op.cur_page = page
+    @refresh_vid_page_btn()
+
+  refresh_vid_page_btn: ->
+    op = vid_opts[current_vid]
+    if op.cur_page == 0
+      @e["btn_vid_left"].removeClass("tab-btn-active")
+    else
+      @e["btn_vid_left"].addClass("tab-btn-active")
+
+    if (op.cur_page >= (op.pages_num - 1)) && (op.limit || op.loading)
+      @e["btn_vid_right"].removeClass("tab-btn-active")
+    else
+      @e["btn_vid_right"].addClass("tab-btn-active")
+
 class Chat
   constructor: (id, opts) ->
     @id = id
@@ -591,113 +698,28 @@ class App
 class Page_Simple extends Page
 
 class Page_Main extends Page
-  current_vid = "new"
-  vid_opts =
-    popular: {cur_page: 0, pages_num: 1, limit: false, loading: false}
-    new: {cur_page: 0, pages_num: 1, limit: false, loading: false}
-
   constructor: ->
     super
-
-    @e["btn_vid_popular"].click(
-      (e) => e.preventDefault(); @switch_vid("popular")
-    )
-    @e["btn_vid_new"].click(
-      (e) => e.preventDefault(); @switch_vid("new")
-    )
-    @e["btn_vid_left"].click(
-      (e) => e.preventDefault(); @change_vid_page("left")
-    )
-    @e["btn_vid_right"].click(
-      (e) => e.preventDefault(); @change_vid_page("right")
-    )
-    @app.get_tpl("film-thumb")
     @chat = new Chat("1", {output: @e.chat_output, online_users: @e.chat_online_users, form: @e.chat_form})
+    @media = new MediaBlock(@e.media_block, {})
 
-  switch_vid: (type) ->
-    return if type == current_vid
-    @e["vid_" + current_vid].hide(); @e["vid_" + type].show()
-    @e["btn_vid_" + current_vid].removeClass("tab-btn-active"); @e["btn_vid_" + type].addClass("tab-btn-active");
-    current_vid = type
-    @refresh_vid_page_btn()
-
-  change_vid_page: (dir) ->
-    op = vid_opts[current_vid]
-    if dir == "right"
-      if op.cur_page < (op.pages_num - 1)
-        @move_to_vid_page(current_vid, op.cur_page + 1)
-      else
-        return if op.limit || op.loading
-        op.loading = true
-        place = $('<div class="vid-page vid-page-loading"></div>')
-        op.pages_num++
-        @e["vid_" + current_vid].append(place).width((op.pages_num * 100) + "%")
-        $(".vid-page", @e["vid_" + current_vid]).width((100 / op.pages_num) + "%")
-        @move_to_vid_page(current_vid, op.pages_num - 1)
-        if current_vid == "new"
-          order = "date"
-        else
-          order = "votes"
-
-        @app.rest.read("media/list",
-          {
-            data: {order: order, limit: "12," + 12 * (op.pages_num - 1)},
-            always: (success, data) =>
-              if success
-                if data && data.length
-                  for item in data
-                    new FilmThumb({parent: place, vals: item})
-                  place.removeClass("vid-page-loading")
-                  # place.text(data.toString())
-                  op.limit = true if data.length < 12
-                else
-                  op.pages_num--
-                  @move_to_vid_page(current_vid, op.pages_num - 1)
-                  place.remove()
-                  op.limit = true
-                op.loading = false
-              else
-                op.pages_num--
-                @move_to_vid_page(current_vid, op.pages_num - 1)
-                place.remove()
-                op.loading = false
-                op.limit = true
-                #@app.notify("Can't load data")
-          }
-        )
-    else
-      @move_to_vid_page current_vid, op.cur_page - 1
-
-  move_to_vid_page: (type, page) ->
-    op = vid_opts[type]
-    return if op.cur_page == page
-    return if page < 0 || ((op.loading || op.limit) && page >= op.pages_num)
-    e = @e["vid_" + type]
-    e.stop().animate({"margin-left": (- page * 100) + "%"})
-    op.cur_page = page
-    @refresh_vid_page_btn()
-
-  refresh_vid_page_btn: ->
-    op = vid_opts[current_vid]
-    if op.cur_page == 0
-      @e["btn_vid_left"].removeClass("tab-btn-active")
-    else
-      @e["btn_vid_left"].addClass("tab-btn-active")
-
-    if (op.cur_page >= (op.pages_num - 1)) && (op.limit || op.loading)
-      @e["btn_vid_right"].removeClass("tab-btn-active")
-    else
-      @e["btn_vid_right"].addClass("tab-btn-active")
+class Page_Show extends Page
+  constructor: (@conf) ->
+    super
+    @media = new MediaBlock(@e.media_block, {topic: @conf.topic.name})
 
 class Page_Video extends Page
   constructor: (@conf) ->
     super
     self = @
-
     videojs("video").ready( ->
       self.player = new Player(this)
     )
     @update_media_list_size()
+    $('a[data-toggle="tab"]', $(".units-media")).on('shown.bs.tab',
+      =>
+        @update_media_list_size()
+    )
 
   update_media_list_size: ->
     self = @
@@ -705,15 +727,16 @@ class Page_Video extends Page
       width = 0
       $this = $(this)
       $(".cast-thumb", $this).each(->
-        console.log $(this).outerWidth()
         width+= $(this).outerWidth() + 20
       )
-      console.log width
       $this.width(width)
     )
-  true
 
 class Page_News extends Page
+  constructor: (@conf) ->
+    super
+
+class Page_OneNews extends Page
   constructor: (@conf) ->
     super
 

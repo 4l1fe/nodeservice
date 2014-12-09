@@ -45,116 +45,114 @@ html
                     .form-group
                         input(type="text", placeholder="Введите номер телефона").form-control
                         button(type="button").btn.btn-success Зарегистрироваться
-        .shadow-container-wrapper
-            .shadow-container
-                section.casts-list
-                    .container
-                        mixin casts_list(casts)
+        .shadow-container
+            section.casts-list
+                .container(data-mi-pid="media_block")
+                    include parts/media_block
+            if news && news.length
+                - news[0].img_url = res.img + "tmp/main_news_index.jpg"
+            section.news-block
+                .container
+                    include parts/news_block
+            section.main-chat
+                .container
+                    h3 Чат
+                    .row.border-wrapper
+                        .col-md-9.chat-items-block
+                            .chat-items-list-wrapper
+                                .chat-items-list(data-mi-pid="chat_output")
+                                    if chat_items && chat_items.length
+                                        each chat_item in chat_items
+                                            .chat-item
+                                                - user_url = '/users/' + chat_item.user.id
+                                                a(href=user_url)=chat_item.user.name + ':'
+                                                = ' '
+                                                span=chat_item.text
+                            form.form.chat-msg-form(data-mi-pid="chat_form")
+                                input(type='text', placeholder='Введите сообщение и нажмите Enter').form-control.chat-msg-input
+                        .col-md-3.hidden-sm.hidden-xs.chat-users-block
+                            .chat-users-list-wrapper
+                                .chat-users-list
+                                    ul(data-mi-pid="chat_online_users")
+                                        if chat_users && chat_users.length
+                                            each user in chat_users
+                                                - online_class = !user.online ? 'online' : ''
+                                                li.chat-user(class=online_class)
+                                                    - user_url = '/users/' + user.id
+                                                    a(href=user_url)=user.name
+            section.social-block
+                .container
+                    .row
+                        .col-lg-4.col-md-6.col-sm-6.column
+                            h3 Рейтинг звезд
+                            ul.top-stars-list
+                                if top_persons && top_persons.length
+                                    each item, i in top_persons
+                                        mixin user_thumb_rating(item, i, true)
+                            a(href="/persons").all-persons Все звезды
+                        .col-lg-4.col-md-6.col-sm-6.column
+                            h3 Рейтинг пользователей
+                            ul.top-users-list
+                                if top_users && top_users.length
+                                    each item, i in top_users
+                                        mixin user_thumb_rating(item, i)
+                        .col-lg-4.col-md-12.col-sm-12.column
+                            h3 Мы в соц.сетях
+                            .soc-widgets(role="tabpanel")
+                                ul.nav.nav-tabs(role="tablist")
+                                    li.active(role="presentation")
+                                        a(href="#vkwidget",aria-controls="vkwidget", role="tab", data-toggle="tab") Вконтакте
+                                    li(role="presentation")
+                                        a(href="#fbwidget",aria-controls="fbwidget", role="tab", data-toggle="tab") Фейсбук
+                                .tab-content
+                                    .tab-pane.active.widget-vk#vkwidget(role="tabpanel")
+                                        #vk_groups
+                                    .tab-pane.widget-fb#fbwidget(role="tabpanel")
+                                        |<div class="fb-like-box" data-href="https://www.facebook.com/SerialovTV" data-width="100%" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="false"></div>
+            section.info-block
+                .container
+                    .row
+                        .col-md-8
+                            h5 Бесплатный онлайн кинотеатр шоу онлайн
+                                br
+                                | сериалы и шоу в хорошем качестве всегда приносят настоящее удовольствие
 
-                section.news-block
-                    .container
-                        h3 Новости
-                        mixin casts_news_block(news_list)
+                            p Случалось ли вам отказаться от просмотра интересного фильма из-за того, что его показывали в неудобное время?
+                                | Приходилось ли искать в сети интернет, где смотреть фильмы онлайн?
+                                | А спорить с домашними из-за выбора кино для просмотра по ТВ?
+                            p Все эти проблемы остались в прошлом! Откройте для себя фильмы онлайн  в HD качестве с кинотеатром Шоу Онлайн.
+                                | Мы не просто освобождаем вас от необходимости идти в кинотеатр или изучать программу телепередач — у посетителей нашего ресурса гораздо больше возможностей.
+                            p Онлайн кинотеатр Шоу Онлайн — это самая большая коллекция отечественных и зарубежных фильмов в рунете.
+                                | Наша видеотека насчитывает более 30 тысяч фильмов и видеороликов, доступных для просмотра
+                                | в онлайн, и постоянно пополняется.
 
-                section.main-chat
-                    .container
-                        h3 Чат
-                        .row.border-wrapper
-                            .col-md-9.chat-items-block
-                                .chat-items-list-wrapper
-                                    .chat-items-list(data-mi-pid="chat_output")
-                                        if chat_items && chat_items.length
-                                            each chat_item in chat_items
-                                                .chat-item
-                                                    - user_url = '/users/' + chat_item.user.id
-                                                    a(href=user_url)=chat_item.user.name + ':'
-                                                    = ' '
-                                                    span=chat_item.text
-                                form.form.chat-msg-form(data-mi-pid="chat_form")
-                                    input(type='text', placeholder='Введите сообщение и нажмите Enter').form-control.chat-msg-input
-                            .col-md-3.hidden-sm.hidden-xs.chat-users-block
-                                .chat-users-list-wrapper
-                                    .chat-users-list
-                                        ul(data-mi-pid="chat_online_users")
-                                            if chat_users && chat_users.length
-                                                each user in chat_users
-                                                    - online_class = !user.online ? 'online' : ''
-                                                    li.chat-user(class=online_class)
-                                                        - user_url = '/users/' + user.id
-
-                                                        a(href=user_url)=user.name
-
-                section.social-block
-                    .container
-                        .row
-                            .col-lg-4.col-md-6.col-sm-6.column
-                                h3 Рейтинг звезд
-                                ul.top-stars-list
-                                    if top_persons && top_persons.length
-                                        each item, i in top_persons
-                                            mixin user_thumb_rating(item, i, true)
-                                a(href="#").all-persons Все звезды сайта
-                            .col-lg-4.col-md-6.col-sm-6.column
-                                h3 Рейтинг пользователей
-                                ul.top-users-list
-                                    if top_users && top_users.length
-                                        each item, i in top_users
-                                            mixin person_rating_thumb(item, i, false)
-                                a(href="/persons").all-persons Все звезды
-                            .col-lg-4.col-md-12.col-sm-12.column
-                                h3 Мы в соц.сетях
-                                .widget-facebook.hide
-                                    |<div class="fb-like-box" data-href="https://www.facebook.com/SerialovTV" data-width="100%" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="false"></div>
-                                .widget-vk
-                                    #vk_groups
-
-                section.info-block
-                    .container
-                        .row
-                            .col-md-8
-                                h5 Бесплатный онлайн кинотеатр шоу онлайн
-                                    br
-                                    | сериалы и шоу в хорошем качестве всегда приносят настоящее удовольствие
-
-                                p Случалось ли вам отказаться от просмотра интересного фильма из-за того, что его показывали в неудобное время?
-                                    | Приходилось ли искать в сети интернет, где смотреть фильмы онлайн?
-                                    | А спорить с домашними из-за выбора кино для просмотра по ТВ?
-                                p Все эти проблемы остались в прошлом! Откройте для себя фильмы онлайн  в HD качестве с кинотеатром Шоу Онлайн.
-                                    | Мы не просто освобождаем вас от необходимости идти в кинотеатр или изучать программу телепередач — у посетителей нашего ресурса гораздо больше возможностей.
-                                p Онлайн кинотеатр Шоу Онлайн — это самая большая коллекция отечественных и зарубежных фильмов в рунете.
-                                    | Наша видеотека насчитывает более 30 тысяч фильмов и видеороликов, доступных для просмотра
-                                    | в онлайн, и постоянно пополняется.
-
-                            - if (stat)
-                                .col-md-4.statistics
-                                    h5 Шоу онлайн в цифрах
-                                    .stat-block
-                                        - if (stat.views_count !== undefined)
-                                            span
-                                                b просмотров видео
-                                                em более
-                                            .stat-number!=format_stat_number(stat.views_count)
-
-                                    .stat-block
-                                        - if (stat.episodes_count)
-                                            .stat-number!=format_stat_number(stat.episodes_count)
+                        - if (stat)
+                            .col-md-4.statistics
+                                h5 Шоу онлайн в цифрах
+                                .stat-block
+                                    - if (stat.views_count !== undefined)
                                         span
-                                            b серий
+                                            b просмотров видео
+                                            em более
+                                        .stat-number!=format_stat_number(stat.views_count)
 
-                                    .stat-block
-                                        - if (stat.users_count !== undefined)
-                                            span
-                                                b участников
-                                                em более
-                                            .stat-number!=format_stat_number(stat.users_count)
-
-                                    .stat-block
-                                        - if (stat.comments_count !== undefined)
-                                            span
-                                                b комментариев
-                                                em более
-                                            .stat-number!=format_stat_number(stat.comments_count)
-                include footer
+                                .stat-block
+                                    - if (stat.episodes_count)
+                                        .stat-number!=format_stat_number(stat.episodes_count)
+                                    span
+                                        b серий
+                                .stat-block
+                                    - if (stat.users_count !== undefined)
+                                        span
+                                            b участников
+                                            em более
+                                        .stat-number!=format_stat_number(stat.users_count)
+                                .stat-block
+                                    - if (stat.comments_count !== undefined)
+                                        span
+                                            b комментариев
+                                            em более
+                                        .stat-number!=format_stat_number(stat.comments_count)
             #fb-root
             script.
                 (function(d, s, id) {
@@ -167,5 +165,6 @@ html
             script(src="//vk.com/js/api/openapi.js?116")
             script.
                 VK.Widgets.Group("vk_groups", {mode: 0, width: "300px", color1: 'FFFFFF', color2: '2B587A', color3: '5B7FA6'}, 82007356);
+            include footer
             script.
                 $(document).ready(function () {window.InitApp({page_conf: {}}, "Main")})

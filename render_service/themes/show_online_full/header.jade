@@ -1,41 +1,42 @@
 .notifications.top-right
 section.head-bar
     .container
-            .row
-                .col-lg-2.col-md-2.col-sm-3.col-xs-4.site-logo-block
+        .row
+            .col-lg-5.site-logo-block
+                .col-md-3.col-sm-4.col-xs-5.col-lg-6
                     a(href="/")
                         img(src=res.img + 'site_logo.png',title="Шоу онлайн", alt="Шоу онлайн").site-logo
-                form.col-lg-3.col-md-10.col-sm-9.col-xs-8.search-block(action="/search")
+                form.col-md-9.col-sm-8.col-xs-7.col-lg-6.search-block(action="/search")
                     .input-group.search-input-group
                         input(type="text", name="q", class="form-control")
                         .input-group-btn
                             button(type="submit").btn.btn-default
                                 i.sprite.sprite-i-search-btn
-                .col-lg-7.col-md-12.col-sm-12.col-xs-12.site-menu-block
-                    if auth_user
-                    else
-                        ul.menu-header
-                            li
-                                a(href="/show")
-                                    .sprite-wrapper
-                                        i.sprite.sprite-i-menu-header-show
-                                    | Шоу и сериалы
-                            li
-                                a(href="/persons")
-                                    .sprite-wrapper
-                                        i.sprite.sprite-i-menu-header-star
-                                    | Звезды
-                            li
-                                a(href="/news")
-                                    .sprite-wrapper
-                                        i.sprite.sprite-i-menu-header-news
-                                    | Новости
-                            li
-                                a.login-url(href="/auth/login/vk-oauth2")
-                                    .sprite-wrapper
-                                        i.sprite.sprite-i-menu-header-login
-                                    | Войти
-                            li
+            .col-lg-7.col-md-12.col-sm-12.col-xs-12.site-menu-block
+                if auth_user
+                else
+                    ul.menu-header
+                        li
+                            a(href="#")
                                 .sprite-wrapper
-                                a.register-url(href="/register")
-                                    | Регистрация
+                                    i.sprite.sprite-i-menu-header-show
+                                | Шоу и сериалы
+                        li
+                            a(href="/persons")
+                                .sprite-wrapper
+                                    i.sprite.sprite-i-menu-header-star
+                                | Звезды
+                        li
+                            a(href="/news")
+                                .sprite-wrapper
+                                    i.sprite.sprite-i-menu-header-news
+                                | Новости
+                        li
+                            a.login-url(href="/login")
+                                .sprite-wrapper
+                                    i.sprite.sprite-i-menu-header-login
+                                | Войти
+                        li
+                            .sprite-wrapper
+                            a.register-url(href="/register")
+                                | Регистрация

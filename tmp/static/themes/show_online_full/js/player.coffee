@@ -18,6 +18,7 @@ class Player
         cf: $('<div style="clear: both; width: 100%;">')
       fullScreenControl: $('.video-js .vjs-fullscreen-control')
       duration: $('.video-js .vjs-duration')
+      remaining: $('.video-js .vjs-remaining-time')
       progress:
         wrapper: $('<div class="vjs-progress-wrapper">')
         holder: $('.vjs-progress-holder')

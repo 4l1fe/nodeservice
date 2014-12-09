@@ -16,32 +16,10 @@ html
                 .shadow-container
                     section.page-news-main-block
                         .container
-                            h3 Новости
-                            .row
-                                .col-lg-6.col-md-12.col-sm-12
-                                    .row
-                                        if news && news.length
-                                            - news_item = news.shift();
-                                            .col-lg-12.col-md-8.col-sm-12.cast-news-item.is-first
-                                                img(src=res.img + "tmp/main_news_news.jpg").cast-img
-                                            - news_item.img_url = null
-                                            .col-lg-12.col-md-4.col-sm-12.cast-news-item.is-first
-                                                mixin news_thumb(news_item)
-                                                .cast-news-text=news_item.text
-                                .col-lg-6.col-md-12.col-sm-12
-                                    h3.small-header-with-icon
-                                        span.sprite.sprite-i-fav-speech-bubble
-                                        em Обсуждаемые новости
-                                    .row
-                                        if news
-                                            each news_item, i in news
-                                                .col-md-4.col-lg-6.col-sm-6.cast-news-item
-                                                    mixin news_thumb(news_item)
-                                                if i > 0 && (i + 1) % 2 == 0
-                                                    .visible-lg-block.visible-sm-block.clearboth
-                                                if i > 0 && (i + 1) % 3 == 0
-                                                    .visible-md-block.clearboth
-                    section.page-news-other-block
+                            - news_block_title = "Обусждаемые новости"
+                            - news_block_no_archive_link = true
+                            include parts/news_block
+                    section.page-news-other-block.news-block
                         .container
                             h3.small-header-with-icon
                                 span.sprite.sprite-i-small-globe
