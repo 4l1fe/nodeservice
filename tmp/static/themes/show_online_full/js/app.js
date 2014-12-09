@@ -352,7 +352,7 @@
 
     FilmThumb.prototype.set_vals = function(vals, do_not_set) {
       if (vals.releasedate) {
-        vals["date"] = time_text(new Date(vals.releasedate));
+        vals["date"] = time_text(new Date(vals.releasedate * 1000));
       }
       if (vals["topic"] === void 0) {
         vals["topic"] = "";
@@ -487,6 +487,8 @@
                     if (data.length < 12) {
                       op.limit = true;
                     }
+                    op.loading = false;
+                    _this.refresh_vid_page_btn();
                   } else {
                     op.pages_num--;
                     _this.move_to_vid_page(current_vid, op.pages_num - 1);

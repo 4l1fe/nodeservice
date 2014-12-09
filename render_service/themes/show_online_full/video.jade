@@ -26,8 +26,9 @@ html
                         | #{" " + title}
                      .video-container
                         - poster = res.global.content_media + media.id + "/poster"
+                        - location = res.global.cdn + "v/" + media.id + "/hd.mp4"
                         video(id="video" class="video-js vjs-default-skin vjs-dark-acid-skin" controls="" preload="none", data-setup="{}", poster=poster)
-                           source(src=media.locations[0].value type='video/mp4')
+                           source(src=location type='video/mp4')
                      .video-ctrls
                         .col-md-7.col-no-padding.col-sm-12
                            .col-md-8.col-no-padding.col-xs-8

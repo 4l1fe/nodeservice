@@ -217,7 +217,7 @@ class FilmThumb extends Item
 
   set_vals: (vals, do_not_set) ->
     if vals.releasedate
-      vals["date"] = time_text(new Date(vals.releasedate))
+      vals["date"] = time_text(new Date(vals.releasedate * 1000))
     vals["topic"] = "" if vals["topic"] == undefined
     if vals.units && vals.units[0]
       vals["topic"] = vals.units[0].topic.title
@@ -296,6 +296,8 @@ class MediaBlock
                   place.removeClass("vid-page-loading")
                   # place.text(data.toString())
                   op.limit = true if data.length < 12
+                  op.loading = false
+                  @refresh_vid_page_btn()
                 else
                   op.pages_num--
                   @move_to_vid_page(current_vid, op.pages_num - 1)

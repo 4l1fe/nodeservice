@@ -341,9 +341,9 @@ footer .solaris-column { text-align: right; float: right; }
 .modal-body {margin: 0 40px 0 40px; padding: 0}
 .modal .nav {border: 0}
 .modal .nav li {margin: 0; width: 50%; text-transform: uppercase; padding-bottom: 0; font-size: 20px}
-.modal .nav-tabs li a, .modal .nav-tabs li.active a {color: #000; font-size: 18px; text-align: center; background: transparent; border: 0;}
-.modal .nav-tabs li a:hover, .modal .nav-tabs li.active a:hover, .modal .nav-tabs li.active a:focus, .modal .nav-tabs li a:hover {background: transparent; border: 0; color: #000}
-.modal .nav-tabs li.active a span {padding-bottom: 15px; background: url("../img/modal_nav_pointer.png") 50% 100% no-repeat}
+.modal .nav-tabs li a, .modal .nav-tabs li.active a {color: #000; font-size: 18px; text-align: center; background: transparent; text-decoration: none}
+.modal .nav-tabs li a:hover, .modal .nav-tabs li.active a:hover, .modal .nav-tabs li.active a:focus, .modal .nav-tabs li a:hover {background: transparent; border: 0; color: #000; text-decoration: none}
+.modal .nav-tabs li.active a span {padding-bottom: 15px; background: url("../img/modal_nav_pointer.png") 50% 100% no-repeat;}
 .modal-dialog {width: 450px}
 .modal-content .social li {list-style-type: none; display: inline-block; width: 25%; text-align: center; margin: 14px 0 25px 0}
 .modal-content .form-group {text-align: center}
@@ -1084,6 +1084,7 @@ h3.small-header-with-icon .sprite {
 .page-video .media-list .cast-thumb:last-child {padding-right: 0}
 .page-video .news-little-list {background: #ffffff}
 
+
 /* page_show */
 
 .cast-def-area {padding-left: 40px}
@@ -1097,3 +1098,4 @@ h3.small-header-with-icon .sprite {
 .cast-rating-def i {font-size: 24px; font-style: normal; color: #000}
 .cast-rating-def em {font-style: normal; color: #999999; margin-top: -5px}
 .cast-def-block h4 {margin-bottom: 10px}
+.see-also-poster img {max-width: 170px}
