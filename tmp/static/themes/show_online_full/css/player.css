@@ -20,7 +20,7 @@ The control icons are from a custom font. Each icon corresponds to a character
   display: none;
 }
 .vjs-dark-acid-skin .vjs-remaining-time {
-  display: block;
+  float: right;
   text-align: left;
 }
 .vjs-dark-acid-skin .vjs-progress-holder {
@@ -36,7 +36,7 @@ The control icons are from a custom font. Each icon corresponds to a character
 .vjs-dark-acid-skin .vjs-progress-control {
   position: absolute;
   top: 1.135em;
-  left: 12em;
+  left: 8.5em;
   right: 22em;
   margin-bottom: 0.5em;
 }
@@ -77,6 +77,7 @@ The control icons are from a custom font. Each icon corresponds to a character
 }
 .vjs-dark-acid-skin .vjs-time-divider {
   padding: 0 0.3em 0 0.3em;
+  display: none;
 }
 .vjs-dark-acid-skin .vjs-volume-control {
   background: #404040;
