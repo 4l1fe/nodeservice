@@ -1,4 +1,5 @@
 app = global.app
+
 app.router.add("/tpl/:name", "tpl", "templates/:name")
 app.router.add("/video/:id", "tpl", "video")
 app.router.add("/:topic/video/:id", "tpl", "video")
