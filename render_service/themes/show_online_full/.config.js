@@ -7,7 +7,7 @@
     $.params("auth_user", $.req.auth_user());
     return $.params("topics_bg", {
       "fizruk": $.req.app.conf.resources.img + "fizruk_bg.jpg",
-      "dom2": $.req.app.conf.resources.img + "dom2_bg.jpg"
+      "Dom2": $.req.app.conf.resources.img + "dom2_bg.jpg"
     });
   };
 

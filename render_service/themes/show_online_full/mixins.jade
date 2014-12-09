@@ -131,7 +131,7 @@ mixin news_thumb(news_item)
         .cast-news-header
             if news_item.topic
                 a.cast-name(href="/" + news_item.topic.name)=news_item.topic.title
-            span.cast-date= ' / ' + utime_text_str(news_item.date)
+            span.cast-date= ' / ' + utime_text_str(news_item.published)
         .cast-news-title
             - url = "/news/" + news_item.id
             if news_item.topic

@@ -206,9 +206,8 @@ class FilmThumb extends Item
     if (attr == "alt" || attr == "title") && name == "name"
       return @vals["name"]
     if attr == "src" && name == "id"
-      # TODO:
-      # return "/content/media/" + @vals["id"] + "/poster_200x200"
-      return @_app.config("content_media") + @vals.id + "/poster"
+      console.log @_app.config("content_media") + @vals["id"] + "/poster_200x200"
+      return @_app.config("content_media") + @vals["id"] + "/poster_200x200"
     super
 
   transform_val: (name, val) ->

@@ -42,7 +42,7 @@
     smarttv: []
   };
 
-  this.content_url = "http://cdn.serialov.tv/content/";
+  this.content_url = "/content/";
 
   this.static_url = "http://cdn.serialov.tv/s/";
 

@@ -337,7 +337,8 @@
         return this.vals["name"];
       }
       if (attr === "src" && name === "id") {
-        return this._app.config("content_media") + this.vals.id + "/poster";
+        console.log(this._app.config("content_media") + this.vals["id"] + "/poster_200x200");
+        return this._app.config("content_media") + this.vals["id"] + "/poster_200x200";
       }
       return FilmThumb.__super__.transform_attr.apply(this, arguments);
     };

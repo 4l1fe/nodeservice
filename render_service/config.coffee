@@ -31,7 +31,7 @@ yaml = require 'js-yaml'
   smarttv: []
 
 # set urls
-@content_url = "http://cdn.serialov.tv/content/"
+@content_url = "/content/"
 @static_url = "http://cdn.serialov.tv/s/"
 @cdn_url = "http://cdn.serialov.tv/"
 @themes_url = @static_url + "themes/"

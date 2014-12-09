@@ -10,7 +10,10 @@ h3 Новости
                - tmp_news.img_url = null
                .col-lg-12.col-md-4.col-sm-12.cast-news-item.is-first
                   mixin news_thumb(tmp_news)
-                  .cast-news-text=tmp_news.text
+                - tmp_text = tmp_news.text
+                if tmp_text.length > 256 && !news_block_no_news_cut
+                    - tmp_text = tmp_text.substr(0,256) + "..."
+                  .cast-news-text!=tmp_text
    .col-lg-6.col-md-12.col-sm-12
        if news_block_title
            h3.small-header-with-icon
