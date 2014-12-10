@@ -91,11 +91,6 @@
           return self.volUpdateAllowed = false;
         }
       });
-      this.elems.quality.bar.on('click', '.vjs-quality-btn', function(ev) {
-        var el;
-        el = $(this);
-        return self.setQuality(el.data('quality'));
-      });
       this.updateQualityBar();
       volIntegerLevel = Math.round(this.player_orig.volume() * this.elems.volume.items.length);
       this.updateVolumeBar(volIntegerLevel);

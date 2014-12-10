@@ -95,9 +95,9 @@ class Player
       if ev.which != 1
         self.volUpdateAllowed = false
 
-    @elems.quality.bar.on 'click', '.vjs-quality-btn', (ev)->
-      el = $(@)
-      self.setQuality el.data('quality')
+    #@elems.quality.bar.on 'click', '.vjs-quality-btn', (ev)->
+    #  el = $(@)
+    #  self.setQuality el.data('quality')
 
     @updateQualityBar()
 
