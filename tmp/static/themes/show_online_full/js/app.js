@@ -327,9 +327,9 @@
       var href;
       if (attr === "href" && name === "id") {
         if (this.vals.units && this.vals.units[0]) {
-          href = this.vals.units[0].topic.name + "/media/" + this.vals.id;
+          href = this.vals.units[0].topic.name + "/video/" + this.vals.id;
         } else {
-          href = "/media/" + this.vals.id;
+          href = "/video/" + this.vals.id;
         }
         return href;
       }

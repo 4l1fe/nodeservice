@@ -5,11 +5,11 @@
   prepare = function($) {
     var opts1, opts2, topic_name;
     opts1 = {
-      limit: 9,
+      limit: "9",
       sort: "comments"
     };
     opts2 = {
-      limit: 12,
+      limit: "12",
       sort: "date"
     };
     topic_name = $.args("topic");

@@ -199,9 +199,9 @@ class FilmThumb extends Item
   transform_attr: (attr, name, val) ->
     if attr == "href" && name == "id"
       if @vals.units && @vals.units[0]
-        href = @vals.units[0].topic.name + "/media/" + @vals.id
+        href = @vals.units[0].topic.name + "/video/" + @vals.id
       else
-        href = "/media/" + @vals.id
+        href = "/video/" + @vals.id
       return href
     if (attr == "alt" || attr == "title") && name == "name"
       return @vals["name"]

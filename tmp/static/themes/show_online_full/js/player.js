@@ -66,9 +66,6 @@
         return self.elems.circlePlayButton.hide();
       });
       $('.video-js .vjs-big-play-button').remove();
-      setTimeout(function() {
-        return $("video")[0].pause();
-      }, 500);
       this.elems.volume.wrapper.on("mousedown", function(ev) {
         return self.volUpdateAllowed = true;
       });

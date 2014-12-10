@@ -129,13 +129,13 @@ mixin news_thumb(news_item)
         img(src=news_item.img_url, alt=news_item.cast_name, title=news_item.cast_name).cast-news-img
     .cast-news-def
         .cast-news-header
-            if news_item.topic
-                a.cast-name(href="/" + news_item.topic.name)=news_item.topic.title
+            if news_item.object
+                a.cast-name(href="/" + news_item.object.name)=news_item.object.title
             span.cast-date= ' / ' + utime_text_str(news_item.published)
         .cast-news-title
             - url = "/news/" + news_item.id
-            if news_item.topic
-                - url = "/" + news_item.topic.name + url
+            if news_item.object
+                - url = "/" + news_item.object.name + url
             a(href=url)=news_item.title
     .clearboth
 

@@ -1,0 +1,13 @@
+doctype html
+html
+   include config
+   include mixins
+   include head
+   body.page-intest
+      include header
+      .shadow-container-wrapper
+         .shadow-container
+            section(style="height: 100%; background: #fafafa;").page-error404.height100rel
+               .container.container-h1
+                  h1 Извините, но сервис находится в закрытом тестовом режиме. Мы скоро заработаем в полную силу!
+      include footer

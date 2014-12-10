@@ -1078,13 +1078,15 @@ h3.small-header-with-icon .sprite {
 .page-video .news-list h2 {background: url("../img/clock-ico.png") no-repeat 0 50%; padding-left: 30px; margin-bottom: 25px}
 
 .page-video .unit-btn, .page-video .unit-btn:hover {color: #74a225; text-transform: uppercase; margin-right: 25px; text-decoration: none; border: 0; }
+.units-media .nav-tabs {border: 0}
+.units-media .nav-tabs li.active a {border: 0}
 
 .page-video .units-media-wrapper {overflow-x: auto; width: 100%}
 .page-video .media-list .cast-thumb {display: inline-block; padding-right: 20px}
 .page-video .media-list .cast-thumb:last-child {padding-right: 0}
 .page-video .news-little-list {background: #ffffff}
 
-
+.page-video .cast-thumb {max-width: 187px}
 /* page_show */
 
 .cast-def-area {padding-left: 40px}
@@ -1099,3 +1101,8 @@ h3.small-header-with-icon .sprite {
 .cast-rating-def em {font-style: normal; color: #999999; margin-top: -5px}
 .cast-def-block h4 {margin-bottom: 10px}
 .see-also-poster img {max-width: 170px}
+
+/* */
+
+.page-intest .container-h1 {text-align: center; padding: 100px 0 100px 0}
+.page-intest h1 {color: #222222; margin-left: 10%; marin-right: 10%;}

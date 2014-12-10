@@ -1,6 +1,6 @@
 prepare = ($) ->
-  opts1 = {limit: 9, sort: "comments"}
-  opts2 = {limit: 12, sort: "date"}
+  opts1 = {limit: "9", sort: "comments"}
+  opts2 = {limit: "12", sort: "date"}
   topic_name = $.args("topic")
   if topic_name
     opts2.obj_type = opts1.obj_type = "topic"

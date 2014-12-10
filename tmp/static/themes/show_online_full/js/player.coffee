@@ -68,10 +68,10 @@ class Player
     $('.video-js .vjs-big-play-button').remove()
 
     #Только для разработки: панель активируется, ставим на паузу
-    setTimeout(
-      ()->
-        $("video")[0].pause();
-      500)
+    #setTimeout(
+    #  ()->
+    #    $("video")[0].pause();
+    #  500)
 
     @elems.volume.wrapper.on "mousedown", (ev) ->
      self.volUpdateAllowed = true
