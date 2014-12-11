@@ -70,7 +70,6 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
 
         if (["post", "put"].indexOf(method_type)>-1) {
             var form = new formidable.IncomingForm();
-            form.uploadDir = upload_dir;
             IPC_pack = makeIpcPack(request);
 
             form.on('field', function(name, value) {
@@ -79,7 +78,21 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                 };
             });
             form.on('fileBegin', function(name, file) { //для сохранения имени файла, вместо случайного хэша
+                /*Сначала файл кидается на диск в папку по токену, потом, после обращения к авторизации,
+                 переносим файл из папки токена в папку по идентификатору пользователя(если авторизация успешна).
+                 Решение временное, до момента нахождения нужного места вызова к api.
+                 Но тут содержится много проблем:
+                 -сохранение файла при каждом запросе без ограничений
+                 -задержка сохранение на диск файла(накопление в буфер)
+                 -предотвращение сохранения больших файлов
+                 -обрывание получение файла, если он большой
+                */
+
                 if (IPC_pack['token']) {
+                    var tokenized_dir = path.join(upload_dir, IPC_pack['token']);
+                    fs.mkdir(tokenized_dir, function(error) {console.log(error)});         //TODO: иногда валилось непонятно почему,
+                    file['path'] = path.join(tokenized_dir, file['name']);  //не успевало создать папку перед сохранением файла?
+
                     var UINFO_pack = JSON.parse(JSON.stringify(IPC_pack));
                     UINFO_pack['api_method'] = '/user/info';
                     UINFO_pack['api_type'] = 'get';
@@ -97,9 +110,15 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                             console.log(res['exception']['message']);
                         }
                         else {
-                            usered_dir = path.join(upload_dir, res['id'].toString());
-                            fs.mkdir(usered_dir, function(error) {});         //TODO: иногда валилось непонятно почему,
-                            file['path'] = path.join(usered_dir, file['name']);  //не успевало создать папку перед сохранением файла?
+                            var usered_dir = path.join(upload_dir, res['id'].toString()),
+                                source, dest;
+                            fs.mkdir(usered_dir, function(error) {console.log(error)});
+                            source = fs.createReadStream(file['path']),
+                            dest = fs.createWriteStream(path.join(usered_dir, file['name']));
+                            source.pipe(dest);
+                            source.on('end', function() {});
+                            source.on('error', function(error) {console.log(error)});
+                            dest.on('error', function(error) {console.log(error)});
                         }
                     }
 
