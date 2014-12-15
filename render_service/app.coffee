@@ -68,11 +68,13 @@ app.Template = require(@conf.lib_path + "template")
 Cache = require(@conf.lib_path + "cache")
 Router = require(@conf.lib_path + "router")
 Api = require(@conf.lib_path + "api")
+JadeCompiler = require(@conf.lib_path + "jade-compiler")
 
 # create router and api instances
 app.router = new Router(@)
 app.api = new Api(@)
 app.cache = new Cache()
+app.jade_compiler = new JadeCompiler()
 
 # add default routes
 # / and /index.html - template {tpl_page_prefix}_index

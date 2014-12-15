@@ -1,7 +1,6 @@
 # * template library
 # * part of engine
 
-jade = require('jade')
 fs = require('fs')
 templates = {}
 app = global.app
@@ -126,7 +125,7 @@ class Template
         @req.response_code(code)
     else
       try
-        @req.response_html jade.renderFile(@req.app.conf.theme_path + @name + @req.app.conf.jade_ext, @params())
+        @req.response_html @req.app.jade_compiler.render(@req.app.conf.theme_path + @name + @req.app.conf.jade_ext, @params())
       catch e
         # return 500 if fail
         @req.response_code 500
