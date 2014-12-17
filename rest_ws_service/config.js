@@ -51,3 +51,5 @@
   this.backend_port = this.namespace['backend_port'] ? this.namespace['backend_port'] : this.server['rest_ws_serv']['backend']['port'];
 
 }).call(this);
+
+//# sourceMappingURL=config.js.map
