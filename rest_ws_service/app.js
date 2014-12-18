@@ -141,7 +141,7 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
         }
     });
     http_server.listen(port, host, function() {
-       console.log("rest server runnig on "+host+":"+port);
+       console.log("rest server runnig on "+host+":"+port+" with backend on "+bck_host+":"+bck_port);
     });
 
     var ws_server = new ws.Server({server: http_server});
