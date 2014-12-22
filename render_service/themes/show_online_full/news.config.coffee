@@ -13,7 +13,7 @@ success = (code, params) ->
     tpl.params("topic", topic)
     tpl.params("topic_name", topic_name)
     tpl.params("onenews", onenews)
-    tpl.api_get("news/list", "news_little", {}, {limit: 5})
+    tpl.api_get("news/list", "news_little", {}, {limit: "5"})
     #else
     #  tpl.set_fail(404)
   else

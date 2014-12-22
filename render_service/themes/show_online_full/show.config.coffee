@@ -3,9 +3,9 @@ tpl = undefined
 topic_success = (code, params) ->
   if code == tpl.req.app.api.STATUS_OK
     topic = params.data
-    tpl.api_get("media/list", "media_pop", {}, {limit: 12, topic: topic.name, sort: "views"})
-    tpl.api_get("media/list", "media_new", {}, {limit: 12, topic: topic.name, sort: "date"})
-    tpl.api_get("news/list", "news", {}, {limit: 10, obj_type: "topic", obj_name: topic.name})
+    tpl.api_get("media/list", "media_pop", {}, {limit: "12", topic: topic.name, sort: "views"})
+    tpl.api_get("media/list", "media_new", {}, {limit: "12", topic: topic.name, sort: "date"})
+    tpl.api_get("news/list", "news", {}, {limit: "10", obj_name: topic.name}) #obj_type: "topic", })
     topic.country = "Россия"
     if topic.name == "fizruk"
       topic.genre = "Сериал"
