@@ -1,5 +1,5 @@
 render_serv:
-  backend: {host: 192.168.1.105, port: 6600}
+  backend: {host: 127.0.0.1, port: 6600}
   host: 127.0.0.1
   port: 9901
 rest_ws_serv:
