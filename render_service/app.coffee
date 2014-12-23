@@ -93,7 +93,7 @@ catch e
   console.log e
 
 # set up HTTP server
-@log_msg("Starting HTTP server on host " + @conf.app_host + " on port " + @conf.app_port)
+@log_msg("Starting HTTP server on " + @conf.app_host+":"+@conf.app_port + " with backend on " + @conf.backend_host+":"+@conf.backend_port)
 server = http.createServer (req, res) ->
   if req.url != "/favicon.ico"
     # create request instance
