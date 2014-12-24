@@ -36,7 +36,12 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
 
     fs.mkdir(upload_dir, function(error) {});
     backend_client.connect("tcp://"+bck_host+":"+bck_port);
-    var http_server = http.createServer(function(request, response) {
+    var http_server = http.createServer();
+
+    http_server.on('connection', function(socket) {
+        socket.setNoDelay();  // облегчение протокола tcp
+    });
+    http_server.on('request', function(request, response) {
         var method_type = request.method.toLowerCase();
 
         function route_cbk(error, res, more) { // объекты request/response должны быть в области видимости
