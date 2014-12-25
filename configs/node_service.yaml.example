@@ -1,8 +1,9 @@
 render_serv:
   backend: {host: 127.0.0.1, port: 6600}
   host: 127.0.0.1
-  port: 9901
+  port: 5400
+  template_dir: templates
 rest_ws_serv:
   backend: {host: 127.0.0.1, port: 6600}
   host: 127.0.0.1
-  port: 9902}
+  port: 5500
