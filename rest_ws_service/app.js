@@ -94,14 +94,15 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                 */
 
                 if (IPC_pack['token']) {
-                    var tokenized_dir = path.join(upload_dir, IPC_pack['token']);
+                    var tokenized_dir = path.join(upload_dir, IPC_pack['token']),
+                        UINFO_pack;
                     fs.mkdir(tokenized_dir, function(error) {console.log(error)});         //TODO: иногда валилось непонятно почему,
                     file['path'] = path.join(tokenized_dir, file['name']);  //не успевало создать папку перед сохранением файла?
 
-                    var UINFO_pack = JSON.parse(JSON.stringify(IPC_pack));
+                    UINFO_pack = JSON.parse(JSON.stringify(IPC_pack));
                     UINFO_pack['api_method'] = '/user/info';
                     UINFO_pack['api_type'] = 'get';
-                    IPC_pack['query_params']['filename'] = file['name'];
+                    IPC_pack['query_params']['filename'] = file['name']; //атриут нужен в api методе сохранения аватарки
 
                     function uinfo_cbk(error, res, more) {
                         if (error) {
@@ -118,7 +119,7 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                             var usered_dir = path.join(upload_dir, res['id'].toString()),
                                 source, dest;
                             fs.mkdir(usered_dir, function(error) {console.log(error)});
-                            source = fs.createReadStream(file['path']),
+                            source = fs.createReadStream(file['path']);
                             dest = fs.createWriteStream(path.join(usered_dir, file['name']));
                             source.pipe(dest);
                             source.on('end', function() {});
@@ -131,7 +132,7 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                 }
             });
             form.on('end', function() {
-                backend_client.invoke("route", IPC_pack, route_cbk);
+                backend_client.invoke("route", IPC_pack, route_cbk);  //отрабатывает до uinfo_cbk()
             });
             form.on('error', function(error) {
                 console.log(error);           // надо рушить соединение
