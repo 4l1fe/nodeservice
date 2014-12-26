@@ -10,7 +10,7 @@ var http = require("http"),
     path = require('path');
 
 
-function makeIpcPack(request) {
+function make_ipc_pack(request) {
     var parsed_url = url.parse(request.url),
         user_agent = request.headers['user-agent'];
 
@@ -30,9 +30,23 @@ function makeIpcPack(request) {
 }
 
 
+function move_to_extras_dir(upload_dir, extras_id, file_path) {
+    var extras_dir, source, dest;
+
+    extras_dir = path.join(upload_dir, extras_id);
+    fs.mkdir(extras_dir, function(error) {});
+    source = fs.createReadStream(file_path);
+    dest = fs.createWriteStream(path.join(extras_dir, path.basename(file_path)));
+    source.pipe(dest);
+    source.on('end', function() {});
+    source.on('error', function(error) {console.log(error)});
+    dest.on('error', function(error) {console.log(error)});
+}
+
+
 function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  // якобы общепринятое правило прятать всё в функцию
     var backend_client = new zerorpc.Client(heartbeat == undefined? {}: {heartbeatInterval: heartbeat}),
-        IPC_pack;
+        IPC_pack, file_path;
 
     fs.mkdir(upload_dir, function(error) {});
     backend_client.connect("tcp://"+bck_host+":"+bck_port);
@@ -64,8 +78,13 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
                 response.end();
             }
             else if (res['social_token']) {
-                response.writeHead(302, {"Location": "/", "Set-Cookie": "token="+res['token']+"; path=/"});
+                response.writeHead(302, {"Location": "/", "Set-Cookie": "token=" + res['token'] + "; path=/"});
                 response.end();
+            }
+            else if (res['isavatar']) {
+                move_to_extras_dir(upload_dir, res['id'].toString(), file_path);
+                response.writeHead(200, {"Content-Type": "application/json"});
+                response.end(JSON.stringify(res['id']));
             }
             else {
                 response.writeHead(200, {"Content-Type": "application/json"});
@@ -75,74 +94,42 @@ function run_server(host, port, bck_host, bck_port, upload_dir, heartbeat) {  //
 
         if (["post", "put"].indexOf(method_type)>-1) {
             var form = new formidable.IncomingForm();
-            IPC_pack = makeIpcPack(request);
+            IPC_pack = make_ipc_pack(request);
 
             form.on('field', function(name, value) {
                 if (!IPC_pack["query_params"][name]) {
                     IPC_pack["query_params"][name] = value;
-                };
+                }
             });
-            form.on('fileBegin', function(name, file) { //для сохранения имени файла, вместо случайного хэша
-                /*Сначала файл кидается на диск в папку по токену, потом, после обращения к авторизации,
-                 переносим файл из папки токена в папку по идентификатору пользователя(если авторизация успешна).
-                 Решение временное, до момента нахождения нужного места вызова к api.
-                 Но тут содержится много проблем:
-                 -сохранение файла при каждом запросе без ограничений
-                 -задержка сохранение на диск файла(накопление в буфер)
-                 -предотвращение сохранения больших файлов
-                 -обрывание получение файла, если он большой
+            form.on('fileBegin', function(name, file) { // для сохранения имени файла, вместо случайного хэша
+                /*Сначала файл кидается на диск в папку по токену,
+                потом переносим файл из папки токена в папку по идентификатору extras(в момент ответа клиенту).
+                Но тут содержится много проблем:
+                -сохранение файла при каждом запросе без ограничений
+                -задержка сохранение на диск файла(накопление в буфер)
+                -предотвращение сохранения больших файлов
+                -обрывание получение файла, если он большой
                 */
 
                 if (IPC_pack['token']) {
-                    var tokenized_dir = path.join(upload_dir, IPC_pack['token']),
-                        UINFO_pack;
-                    fs.mkdir(tokenized_dir, function(error) {console.log(error)});         //TODO: иногда валилось непонятно почему,
-                    file['path'] = path.join(tokenized_dir, file['name']);  //не успевало создать папку перед сохранением файла?
-
-                    UINFO_pack = JSON.parse(JSON.stringify(IPC_pack));
-                    UINFO_pack['api_method'] = '/user/info';
-                    UINFO_pack['api_type'] = 'get';
-                    IPC_pack['query_params']['filename'] = file['name']; //атриут нужен в api методе сохранения аватарки
-
-                    function uinfo_cbk(error, res, more) {
-                        if (error) {
-                            console.log(error);
-                        }
-                        else if (!res) {
-                            console.log('Invoke has not got response from avatar method');
-                        }
-                        else if (res['exception']) {
-                            var code = parseInt(res['exception']['code']);
-                            console.log(res['exception']['message']);
-                        }
-                        else {
-                            var usered_dir = path.join(upload_dir, res['id'].toString()),
-                                source, dest;
-                            fs.mkdir(usered_dir, function(error) {console.log(error)});
-                            source = fs.createReadStream(file['path']);
-                            dest = fs.createWriteStream(path.join(usered_dir, file['name']));
-                            source.pipe(dest);
-                            source.on('end', function() {});
-                            source.on('error', function(error) {console.log(error)});
-                            dest.on('error', function(error) {console.log(error)});
-                        }
-                    }
-
-                    backend_client.invoke("route", UINFO_pack, uinfo_cbk);
+                    var tokenized_dir = path.join(upload_dir, IPC_pack['token']);
+                    fs.mkdir(tokenized_dir, function(error) {});         // TODO: иногда валилось непонятно почему,
+                    file['path'] = file_path = path.join(tokenized_dir, file['name']);  // не успевало создать папку перед сохранением файла?
+                    IPC_pack['query_params']['filename'] = file['name']; // атрибут нужен в api методе сохранения аватарки
                 }
             });
             form.on('end', function() {
-                backend_client.invoke("route", IPC_pack, route_cbk);  //отрабатывает до uinfo_cbk()
+                backend_client.invoke("route", IPC_pack, route_cbk);
             });
             form.on('error', function(error) {
                 console.log(error);           // надо рушить соединение
-                response.end(error.message); //TODO:you will have to manually call request.resume()
+                response.end(error.message); // TODO:you will have to manually call request.resume()
             });                             // if you want the request to continue firing 'data' events.
             form.parse(request);
         }
 
         else {
-            IPC_pack = makeIpcPack(request);
+            IPC_pack = make_ipc_pack(request);
             backend_client.invoke("route", IPC_pack, route_cbk)
         }
     });
